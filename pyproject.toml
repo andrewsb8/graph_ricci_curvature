@@ -1,0 +1,25 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "graph-ricci-curvature"
+version = "0.0.1"
+authors = [
+  { name="Brian Andrews", email="b9andrews@gmail.com" },
+]
+description = "Calculate Ricci Curvature of a Graph"
+readme = "README.md"
+requires-python = ">=3.10"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Operating System :: OS Independent",
+]
+dependencies = [
+    'networkx',
+    'POT',
+    'numpy',
+]
+
+[project.urls]
+Homepage = "https://github.com/andrewsb8/graph-ricci-curvature"
