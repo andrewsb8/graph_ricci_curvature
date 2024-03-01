@@ -15,7 +15,7 @@ def get_shortest_path_matrix(graph, source_neighborhood, target_neighborhood):
     for source in source_neighborhood:
         tmp = []
         for target in target_neighborhood:
-            tmp.append(nx.shortest_path_length(G, source, target))
+            tmp.append(nx.shortest_path_length(graph, source, target))
         d.append(tmp)
     return np.array(d)
 
