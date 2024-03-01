@@ -1,4 +1,4 @@
-# graph-ricci-curvature
+# graph_ricci_curvature
 Calculate Ricci Curvature for a networkx graph
 
 # Installation
