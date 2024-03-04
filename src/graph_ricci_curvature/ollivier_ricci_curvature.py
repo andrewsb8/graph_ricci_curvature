@@ -4,14 +4,14 @@ import ot
 from src.graph_ricci_curvature.ricci_curvature import RicciCurvature
 
 class OllivierRicciCurvature(RicciCurvature):
-    def __init__(self):
-        super().__init__()
-        print("did it!")
+    def __init__(self, G: nx.Graph, weight_key="weight"):
+        super().__init__(G, weight_key)
 
     def _get_num_neighbors(self, graph, node):
         return len(list(graph.neighbors(node)))
 
     def _neighborhood_mass_distributions(node, num_neighbors, alpha):
+        #TO DO: add case for node with no neighbors
         distributions = [(1 - alpha)/num_neighbors] * num_neighbors
         distributions = np.array(distributions.append(alpha))
         return distributions
