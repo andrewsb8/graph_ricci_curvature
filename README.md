@@ -23,7 +23,9 @@ After installation (for Ollivier Ricci Curvature):
 
 ```
 from graph_ricci_curvature.ollivier_ricci_curvature import OllivierRicciCurvature
-g = OllivierRicciCurvature()
+import networkx as nx
+G = nx.Graph()
+g = OllivierRicciCurvature(G)
 ```
 
 Output:
