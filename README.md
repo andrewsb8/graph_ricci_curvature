@@ -19,17 +19,15 @@ Not done yet
 
 # Usage
 
-After installation:
+After installation (for Ollivier Ricci Curvature):
 
 ```
-from graph_ricci_curvature import ricci_curvature
-ricci_curvature.example()
+from graph_ricci_curvature.ollivier_ricci_curvature import OllivierRicciCurvature
+g = OllivierRicciCurvature()
 ```
 
 Output:
 
 ```
-[0.5 0.5] [0.25 0.25 0.5 ] [[1 1 0]
- [0 2 1]]
-Curvature:  0.5
+
 ```

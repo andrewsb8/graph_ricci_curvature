@@ -1,11 +1,12 @@
 import networkx as nx
 import numpy as np
 import ot
-from ricci_curvature import RicciCurvature
+from src.graph_ricci_curvature.ricci_curvature import RicciCurvature
 
 class OllivierRicciCurvature(RicciCurvature):
     def __init__(self):
-        pass
+        super().__init__()
+        print("did it!")
 
     def _get_num_neighbors(self, graph, node):
         return len(list(graph.neighbors(node)))
