@@ -29,5 +29,5 @@ class RicciCurvature(ABC):
     def _check_directed(self):
         if self.G.is_directed():
             raise NotImplementedError(
-                "Directed Graphs are not implemented. Set your graph to undirected with self.G.to_undirected()."
+                "Directed Graphs are not implemented. Set your graph to undirected with G.to_undirected()."
             )
