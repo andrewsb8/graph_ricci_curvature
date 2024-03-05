@@ -29,6 +29,7 @@ class OllivierRicciCurvature(RicciCurvature):
     def _neighborhood_mass_distribution(self, node, alpha=0.5):
         # TO DO: add case for node with no neighbors
         # TO DO: make sure neighbors is not zero somewhere
+        # TO DO: add weights for mass distribution with a test
         node_neighbors = self._get_neighbors(node)
         distribution = [
             ((1 - alpha) / len(node_neighbors)) for neighbor in node_neighbors
