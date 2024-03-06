@@ -17,6 +17,7 @@ class RicciCurvature(ABC):
         key to specify edge weights in networkx dictionary
 
     """
+
     def __init__(self, G: nx.Graph, weight_key):
         self.G = G.copy()
         self.weight_key = weight_key

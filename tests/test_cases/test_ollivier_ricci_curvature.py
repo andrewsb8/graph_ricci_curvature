@@ -3,6 +3,7 @@ import numpy as np
 from src.graph_ricci_curvature.ricci_curvature import RicciCurvature
 from src.graph_ricci_curvature.ollivier_ricci_curvature import OllivierRicciCurvature
 
+
 def test_mass_distribution(simple_graph):
     """
     Test that mass distribution among neighborhoods works with unweighted edges
@@ -45,6 +46,7 @@ def test_ricci_tensor(simple_graph):
         (1, 3, {"weight": 1.0, "ricci_curvature": 0.5}),
     ]
 
+
 def test_node_curvature(simple_graph):
     """
     Test calculation of normalized nodal scalar curvature from the Ricci
@@ -54,9 +56,9 @@ def test_node_curvature(simple_graph):
     obj = OllivierRicciCurvature(simple_graph)
     obj._calculate_ricci_curvature()
     assert list(obj.G.nodes.data()) == [
-    (1, {'ricci_curvature': 0.5}),
-    (2, {'ricci_curvature': 0.5}),
-    (3, {'ricci_curvature': 0.5})
+        (1, {"ricci_curvature": 0.5}),
+        (2, {"ricci_curvature": 0.5}),
+        (3, {"ricci_curvature": 0.5}),
     ]
 
 

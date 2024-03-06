@@ -17,6 +17,7 @@ class OllivierRicciCurvature(RicciCurvature):
         key to specify edge weights in networkx dictionary. Default = weight
 
     """
+
     def __init__(self, G: nx.Graph, weight_key="weight"):
         super().__init__(G, weight_key)
 
