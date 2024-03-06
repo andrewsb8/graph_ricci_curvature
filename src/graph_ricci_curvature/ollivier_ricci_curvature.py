@@ -6,6 +6,17 @@ from src.graph_ricci_curvature.ricci_curvature import RicciCurvature
 
 
 class OllivierRicciCurvature(RicciCurvature):
+    """
+    Class for calculating Ollivier Ricci Curvature
+
+    Parameters
+    ----------
+    G : networkx graph
+        Input graph
+    weight_key : str
+        key to specify edge weights in networkx dictionary. Default = weight
+
+    """
     def __init__(self, G: nx.Graph, weight_key="weight"):
         super().__init__(G, weight_key)
 
@@ -25,6 +36,11 @@ class OllivierRicciCurvature(RicciCurvature):
         nx.set_node_attributes(self.G, node_curvature, "ricci_curvature")
 
     def _calculate_node_curvature(self, node):
+        """
+        Calculates normalized nodal scalar Ricci Curvature as described in
+        Sandhu et al., Scientific Reports, 2015, DOi: 10.1038/srep12323
+
+        """
         neighbors = self._get_neighbors(node)
         weight_sum = self._calculate_weight_sum(node, neighbors)
         return sum(
@@ -36,6 +52,11 @@ class OllivierRicciCurvature(RicciCurvature):
         )
 
     def _calculate_edge_curvature(self, source_node, target_node, alpha=0.5):
+        """
+        Calculate value of Ricci Curvature tensor associated with an edge
+        between a source and target node
+
+        """
         source_neighbors, source_dist = self._neighborhood_mass_distribution(
             source_node, alpha
         )
@@ -54,9 +75,18 @@ class OllivierRicciCurvature(RicciCurvature):
         return list(self.G.neighbors(node))
 
     def _calculate_weight_sum(self, node, neighbors):
+        """
+        Calculate sum of weights of edges connected to a given node
+
+        """
         return sum([self.G[node][neighbor][self.weight_key] for neighbor in neighbors])
 
     def _neighborhood_mass_distribution(self, node, alpha=0.5):
+        """
+        Distribute 1 - alpha mass from a node to its neighbors according
+        to edge weights
+
+        """
         neighbors = self._get_neighbors(node)
         num_neighbors = len(neighbors)
         if num_neighbors == 0:
@@ -75,7 +105,12 @@ class OllivierRicciCurvature(RicciCurvature):
         return np.array(neighbors + [node]), np.array(distribution + [alpha])
 
     def _get_shortest_path_matrix(self, source_neighborhood, target_neighborhood):
-        # find shortest distance between every node in source neighborhood (attached to source node by one edge) and every node in target neighborhood
+        """
+        Find shortest distance between every node in source neighborhood
+        (attached to source node by one edge) and every node in target
+        neighborhood
+
+        """
         return np.array(
             [
                 [

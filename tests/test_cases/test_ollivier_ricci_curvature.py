@@ -3,18 +3,41 @@ import numpy as np
 from src.graph_ricci_curvature.ricci_curvature import RicciCurvature
 from src.graph_ricci_curvature.ollivier_ricci_curvature import OllivierRicciCurvature
 
+def test_mass_distribution(simple_graph):
+    """
+    Test that mass distribution among neighborhoods works with unweighted edges
+
+    """
+    obj = OllivierRicciCurvature(simple_graph)
+    nodes, distributions = obj._neighborhood_mass_distribution(1)
+    assert np.allclose(distributions, np.array([0.25, 0.25, 0.5]))
+
 
 def test_calculate_edge_curvature(simple_graph):
+    """
+    Test for correct value of Ricci Curvature of an edge in a simple graph
+
+    """
     obj = OllivierRicciCurvature(simple_graph)
     assert obj._calculate_edge_curvature(1, 2) == 0.5
 
 
 def test_tensor_symmetry(simple_graph):
+    """
+    Test the Ricci Curvature of an edge is the same if source and target nodes
+    are swapped
+
+    """
     obj = OllivierRicciCurvature(simple_graph)
     assert obj._calculate_edge_curvature(1, 2) == obj._calculate_edge_curvature(2, 1)
 
 
 def test_ricci_tensor(simple_graph):
+    """
+    Test Ricci curvature calculation for multiple edges in bulk and addition
+    to graph object
+
+    """
     obj = OllivierRicciCurvature(simple_graph)
     obj._calculate_ricci_curvature()
     assert list(obj.G.edges.data()) == [
@@ -24,12 +47,20 @@ def test_ricci_tensor(simple_graph):
 
 
 def test_weighted_mass_distribution(simple_weighted_graph):
+    """
+    Test that mass distribution among neighborhoods works with weighted edges
+
+    """
     obj = OllivierRicciCurvature(simple_weighted_graph)
     nodes, distributions = obj._neighborhood_mass_distribution(1)
     assert np.allclose(distributions, np.array([0.4, 0.1, 0.5]))
 
 
 def test_weighted_ricci_curvature(simple_weighted_graph):
+    """
+    Test calculation of ricci curvature tensor for weighted graph
+
+    """
     obj = OllivierRicciCurvature(simple_weighted_graph)
     obj._calculate_ricci_curvature()
     assert list(obj.G.edges.data()) == [

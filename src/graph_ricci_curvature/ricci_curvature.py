@@ -6,12 +6,28 @@ from src.exceptions.exceptions import NotImplementedError
 
 
 class RicciCurvature(ABC):
+    """
+    Parent class for classes calculating Ricci Curvature
+
+    Parameters
+    ----------
+    G : networkx graph
+        Input graph
+    weight_key : str
+        key to specify edge weights in networkx dictionary
+
+    """
     def __init__(self, G: nx.Graph, weight_key):
         self.G = G.copy()
         self.weight_key = weight_key
         self._validate()
 
     def _validate(self):
+        """
+        Validate user input by checking the graph has appropriate properties
+        for calculating curvature
+
+        """
         self._check_directed()
 
         if len(self.G.nodes()) == 0:
