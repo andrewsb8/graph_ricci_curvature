@@ -12,10 +12,8 @@ class RicciCurvature(ABC):
         self._validate()
 
     def _validate(self):
-        self._check_edge_weights()
         self._check_directed()
 
-    def _check_edge_weights(self):
         if not nx.get_edge_attributes(self.G, self.weight_key):
             sys.stderr.write(
                 "No edge weights detected, setting edge weights to one with weight_key = weight\n"
@@ -27,6 +25,7 @@ class RicciCurvature(ABC):
             self.G[i][j][self.weight_key] = 1.0
 
     def _check_directed(self):
+        # this function will be removed when support for directed graphs is added
         if self.G.is_directed():
             raise NotImplementedError(
                 "Directed Graphs are not implemented. Set your graph to undirected with G.to_undirected()."

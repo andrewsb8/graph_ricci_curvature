@@ -10,6 +10,9 @@ class OllivierRicciCurvature(RicciCurvature):
         super().__init__(G, weight_key)
 
     def _calculate_ricci_curvature(self, alpha=0.5):
+        if alpha >= 1 or alpha <= 0:
+            raise ValueError("alpha must be set between 0 and 1")
+
         ricci_tensor = {
             edge: self._calculate_edge_curvature(edge[0], edge[1], alpha)
             for edge in self.G.edges()
