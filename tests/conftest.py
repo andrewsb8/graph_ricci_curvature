@@ -9,3 +9,14 @@ def simple_graph():
     G.add_nodes_from([1, 2, 3])
     G.add_edges_from([(1, 2), (1, 3)])
     return G
+
+
+@pytest.fixture
+def simple_weighted_graph():
+    """Mock optimizer"""
+    G = nx.Graph()
+    G.add_nodes_from([1, 2, 3])
+    G.add_edges_from([(1, 2), (1, 3)])
+    G.edges[1, 2]["weight"] = 0.5
+    G.edges[1, 3]["weight"] = 2
+    return G
