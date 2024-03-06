@@ -14,6 +14,12 @@ class RicciCurvature(ABC):
     def _validate(self):
         self._check_directed()
 
+        if len(self.G.nodes()) == 0:
+            raise ValueError("Graph has no nodes!")
+
+        if len(self.G.edges()) == 0:
+            raise ValueError("Graph has no edges!")
+
         if not nx.get_edge_attributes(self.G, self.weight_key):
             sys.stderr.write(
                 "No edge weights detected, setting edge weights to one with weight_key = weight\n"
