@@ -1,6 +1,7 @@
 import pytest
 import networkx as nx
 
+
 @pytest.fixture
 def simple_graph():
     """Mock optimizer"""

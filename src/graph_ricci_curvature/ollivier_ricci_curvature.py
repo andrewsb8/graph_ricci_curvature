@@ -6,27 +6,23 @@ from src.graph_ricci_curvature.ricci_curvature import RicciCurvature
 
 
 class OllivierRicciCurvature(RicciCurvature):
-    def __init__(self, G: nx.Graph, weight_key="weight", alpha=0.5):
+    def __init__(self, G: nx.Graph, weight_key="weight"):
         super().__init__(G, weight_key)
 
-    def _calculate_ricci_curvature(self):
-        self._calculate_ricci_tensor()
-
-    def _calculate_ricci_tensor(self):
-        ricci_tensor = {edge : self._calculate_edge_curvature(edge[0], edge[1]) for edge in self.G.edges()}
+    def _calculate_ricci_curvature(self, alpha=0.5):
+        ricci_tensor = {
+            edge: self._calculate_edge_curvature(edge[0], edge[1], alpha)
+            for edge in self.G.edges()
+        }
         nx.set_edge_attributes(self.G, ricci_tensor, "ricci_curvature")
+        # TO DO: Calculate nodal curvature
 
-    def _calculate_node_scalar_curvature(self):
-        raise NotImplementedError(
-            "Node scalar curvature is not implemented yet. Set your graph to undirected with G.to_undirected()."
-        )
-
-    def _calculate_edge_curvature(self, source_node, target_node):
+    def _calculate_edge_curvature(self, source_node, target_node, alpha=0.5):
         source_neighbors, source_dist = self._neighborhood_mass_distribution(
-            source_node
+            source_node, alpha
         )
         target_neighbors, target_dist = self._neighborhood_mass_distribution(
-            target_node
+            target_node, alpha
         )
         short_path_matrix = self._get_shortest_path_matrix(
             source_neighbors, target_neighbors
