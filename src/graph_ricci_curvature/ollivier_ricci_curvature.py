@@ -36,18 +36,24 @@ class OllivierRicciCurvature(RicciCurvature):
         return list(self.G.neighbors(node))
 
     def _neighborhood_mass_distribution(self, node, alpha=0.5):
-        # TO DO: add weights for mass distribution with a test
         node_neighbors = self._get_neighbors(node)
         num_neighbors = len(node_neighbors)
         if num_neighbors == 0:
             return [node], [1]
+        elif num_neighbors == 1:
+            distribution = [1 - alpha]
         else:
+            weight_sum = sum(
+                [self.G[node][neighbor][self.weight_key] for neighbor in node_neighbors]
+            )
             distribution = [
-                ((1 - alpha) / num_neighbors) for neighbor in node_neighbors
+                (
+                    (1 - alpha)
+                    * (1 - (self.G[node][neighbor][self.weight_key] / weight_sum))
+                )
+                for neighbor in node_neighbors
             ]
-            node_neighbors = np.array(node_neighbors + [node])
-            distribution = np.array(distribution + [alpha])
-            return node_neighbors, distribution
+        return np.array(node_neighbors + [node]), np.array(distribution + [alpha])
 
     def _get_shortest_path_matrix(self, source_neighborhood, target_neighborhood):
         # find shortest distance between every node in source neighborhood (attached to source node by one edge) and every node in target neighborhood
