@@ -10,3 +10,8 @@ def test_calculate_edge_curvature(simple_graph):
 def test_tensor_symmetry(simple_graph):
     obj = OllivierRicciCurvature(simple_graph)
     assert obj._calculate_edge_curvature(1, 2) == obj._calculate_edge_curvature(2, 1)
+
+def test_ricci_tensor(simple_graph):
+    obj = OllivierRicciCurvature(simple_graph)
+    obj._calculate_ricci_tensor()
+    assert list(obj.G.edges.data()) == [(1, 2, {'weight': 1.0, 'ricci_curvature': 0.5}), (1, 3, {'weight': 1.0, 'ricci_curvature': 0.5})]
