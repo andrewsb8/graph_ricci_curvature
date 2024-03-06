@@ -29,7 +29,7 @@ G.add_nodes_from([1, 2, 3])
 G.add_edges_from([(1, 2), (1, 3)])
 g = OllivierRicciCurvature(G)
 g._calculate_ricci_curvature()
-print(list(obj.G.edges.data()))
+print(list(g.G.edges.data()))
 ```
 
 Output:
