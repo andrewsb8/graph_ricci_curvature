@@ -1,3 +1,9 @@
+"""
+References:
+    - Ollivier, Y. 2009. "Ricci curvature of Markov chains on metric spaces". Journal of Functional Analysis, 256(3), 810-864.
+    - Sandhu et al. 2015. "Graph Curvature for Differentiating Cancer Networks". Scientific Reports. DOi: 10.1038/srep12323
+"""
+
 import networkx as nx
 import numpy as np
 import ot
