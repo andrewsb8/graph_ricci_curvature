@@ -1,10 +1,10 @@
 import networkx as nx
 import numpy as np
 import ot
-from src.graph_ricci_curvature.ricci_curvature import RicciCurvature
+from src.graph_ricci_curvature.graph_metric import GraphMetric
 
 
-class OllivierRicciCurvature(RicciCurvature):
+class OllivierRicciCurvature(GraphMetric):
     """
     Class for calculating Ollivier Ricci Curvature
 

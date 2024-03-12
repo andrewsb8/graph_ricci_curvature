@@ -4,7 +4,7 @@ import numpy as np
 import sys
 
 
-class RicciCurvature(ABC):
+class GraphMetric(ABC):
     """
     Parent class for classes calculating Ricci Curvature
 
