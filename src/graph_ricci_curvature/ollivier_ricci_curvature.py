@@ -83,8 +83,9 @@ class OllivierRicciCurvature(GraphMetric):
 
     def _neighborhood_mass_distribution(self, node, alpha=0.5):
         """
-        Distribute 1 - alpha mass from a node to its neighbors according
-        to edge weights
+        Alpha is a hyperparameter such that 1 - alpha mass is distributed from
+        a node to its neighbors according to edge weights. Default is 0.5 but
+        can be changed by producing it as an argument to _calculate_ricci_curvature
 
         """
         neighbors = self._get_neighbors(node)
