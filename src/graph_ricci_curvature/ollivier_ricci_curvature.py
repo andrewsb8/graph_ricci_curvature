@@ -54,7 +54,9 @@ class OllivierRicciCurvature(GraphMetric):
     def _calculate_edge_curvature(self, source_node, target_node, alpha=0.5):
         """
         Calculate value of Ricci Curvature tensor associated with an edge
-        between a source and target node
+        between a source and target node defined as
+
+        1 - ( Wasserstein 1 Distance / Edge Weight )
 
         """
         source_neighbors, source_dist = self._neighborhood_mass_distribution(
@@ -66,10 +68,9 @@ class OllivierRicciCurvature(GraphMetric):
         short_path_matrix = self._get_shortest_path_matrix(
             source_neighbors, target_neighbors
         )
-        return 1 - (
-            ot.emd2(source_dist, target_dist, short_path_matrix)
-            / self.G.edges[source_node, target_node][self.weight_key]
-        )
+        wasserstein_one = ot.emd2(source_dist, target_dist, short_path_matrix)
+        edge_weight = self.G.edges[source_node, target_node][self.weight_key]
+        return 1 - (wasserstein_one / edge_weight)
 
     def _get_neighbors(self, node):
         return list(self.G.neighbors(node))
