@@ -21,6 +21,23 @@ class OllivierRicciCurvature(GraphMetric):
         super().__init__(G, weight_key)
 
     def _calculate_ricci_curvature(self, alpha=0.5):
+        """
+        Calculate nonzero values of Ricci curvature tensor for all edges in
+        graph self.G
+
+        Parameters
+        ----------
+        alpha : float
+            hyperparameter (0 <= alpha <=1) determining how much mass to move
+            from node
+
+        Returns
+        -------
+        self.G : networkx graph
+            Returns graph with ricci_curvature as node and edge attributes
+
+        """
+
         if alpha >= 1 or alpha <= 0:
             raise ValueError("alpha must be set between 0 and 1")
 
@@ -37,8 +54,19 @@ class OllivierRicciCurvature(GraphMetric):
 
     def _calculate_node_curvature(self, node):
         """
-        Calculates normalized nodal scalar Ricci Curvature as described in
-        Sandhu et al., Scientific Reports, 2015, DOi: 10.1038/srep12323
+        Calculates normalized nodal scalar Ricci Curvature (i.e. contracting
+        the curvature tensor) as described in Sandhu et al., Scientific Reports,
+        2015, DOi: 10.1038/srep12323
+
+        Parameters
+        ----------
+        node : int or tuple
+            index of node in graph self.G
+
+        Returns
+        -------
+        Normalized sum of edge curvatures of node and its neighbors. Normalized
+        by edge weights
 
         """
         neighbors = self._get_neighbors(node)
@@ -58,6 +86,21 @@ class OllivierRicciCurvature(GraphMetric):
 
         1 - ( Wasserstein 1 Distance / Edge Weight )
 
+        Parameters
+        ----------
+        source_node : int or tuple
+            index of source_node in graph self.G
+        target_node : int or tuple
+            index of target node in graph self.G
+        alpha : float
+            hyperparameter (0 <= alpha <=1) determining how much mass to move
+            from node
+
+        Returns
+        -------
+        curvature : float
+            value of curvature tensor
+
         """
         source_neighbors, source_dist = self._neighborhood_mass_distribution(
             source_node, alpha
@@ -70,7 +113,8 @@ class OllivierRicciCurvature(GraphMetric):
         )
         wasserstein_one = ot.emd2(source_dist, target_dist, short_path_matrix)
         edge_weight = self.G.edges[source_node, target_node][self.weight_key]
-        return 1 - (wasserstein_one / edge_weight)
+        curvature = 1 - (wasserstein_one / edge_weight)
+        return curvature
 
     def _get_neighbors(self, node):
         return list(self.G.neighbors(node))
@@ -85,8 +129,24 @@ class OllivierRicciCurvature(GraphMetric):
     def _neighborhood_mass_distribution(self, node, alpha=0.5):
         """
         Alpha is a hyperparameter such that 1 - alpha mass is distributed from
-        a node to its neighbors according to edge weights. Default is 0.5 but
-        can be changed by producing it as an argument to _calculate_ricci_curvature
+        a node to its nearest neighbors according to edge weights. Default is
+        0.5 but can be changed by producing it as an argument to
+        _calculate_ricci_curvature
+
+        Parameters
+        ----------
+        node : int or tuple
+            index of node of graph self.G
+        alpha : float
+            hyperparameter (0 <= alpha <=1) determining how much mass to move
+            from node
+
+        Returns
+        -------
+        neighbors : numpy array
+            array of indices of nearest neighbor nodes of input node
+        distribution : numpy array
+            array of mass at each node in array neighbors
 
         """
         neighbors = self._get_neighbors(node)
@@ -110,6 +170,19 @@ class OllivierRicciCurvature(GraphMetric):
         """
         Find shortest distance between every node in source neighborhood
         (attached to source node by one edge) and every node in target
+        neighborhood
+
+        Parameters
+        ----------
+        source_neighborhood : list
+            list of node index values (ints or tuples) of a source node and its neighbors
+        target_neighborhood : list
+            list of node index values (ints or tuples) of a source node and its neighbors
+
+        Returns
+        -------
+        numpy array of shape len(source_neighbors) x len(target_neighborhood) including
+        shortest path matrices between nodes in source neighborhood and nodes in target
         neighborhood
 
         """

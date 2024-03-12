@@ -6,7 +6,7 @@ import sys
 
 class GraphMetric(ABC):
     """
-    Parent class for classes calculating Ricci Curvature
+    Parent class for classes calculating properties of a graph
 
     Parameters
     ----------
