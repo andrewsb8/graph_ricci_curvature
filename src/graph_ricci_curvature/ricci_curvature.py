@@ -2,7 +2,6 @@ from abc import ABC, abstractmethod
 import networkx as nx
 import numpy as np
 import sys
-from src.exceptions.exceptions import NotImplementedError
 
 
 class RicciCurvature(ABC):

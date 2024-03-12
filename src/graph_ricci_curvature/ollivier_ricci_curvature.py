@@ -1,7 +1,6 @@
 import networkx as nx
 import numpy as np
 import ot
-from src.exceptions.exceptions import NotImplementedError
 from src.graph_ricci_curvature.ricci_curvature import RicciCurvature
 
 
