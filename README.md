@@ -22,14 +22,27 @@ Not done yet
 After installation:
 
 ```
-from graph_ricci_curvature import ricci_curvature
-ricci_curvature.example()
+from graph_ricci_curvature.ollivier_ricci_curvature import OllivierRicciCurvature
+import networkx as nx
+G = nx.Graph()
+G.add_nodes_from([1, 2, 3])
+G.add_edges_from([(1, 2), (1, 3)])
+g = OllivierRicciCurvature(G)
+g._calculate_ricci_curvature()
+print(list(g.G.edges.data()))
+print(list(g.G.nodes.data()))
 ```
 
 Output:
 
 ```
-[0.5 0.5] [0.25 0.25 0.5 ] [[1 1 0]
- [0 2 1]]
-Curvature:  0.5
+[
+(1, 2, {"weight": 1.0, "ricci_curvature": 0.5}),
+(1, 3, {"weight": 1.0, "ricci_curvature": 0.5}),
+]
+[
+(1, {'ricci_curvature': 0.5}),
+(2, {'ricci_curvature': 0.5}),
+(3, {'ricci_curvature': 0.5})
+]
 ```
