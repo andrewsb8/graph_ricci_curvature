@@ -1,7 +1,7 @@
 import pytest
 import numpy as np
-from src.graph_ricci_curvature.graph_metric import GraphMetric
-from src.graph_ricci_curvature.ollivier_ricci_curvature import OllivierRicciCurvature
+from graph_ricci_curvature.graph_metric import GraphMetric
+from graph_ricci_curvature.ollivier_ricci_curvature import OllivierRicciCurvature
 
 
 def test_mass_distribution(simple_graph):
