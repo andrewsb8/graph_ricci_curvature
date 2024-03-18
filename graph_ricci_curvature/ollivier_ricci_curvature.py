@@ -117,6 +117,7 @@ class OllivierRicciCurvature(GraphMetric):
         short_path_matrix = self._get_shortest_path_matrix(
             source_neighbors, target_neighbors
         )
+        print(source_neighbors, target_neighbors, source_dist, target_dist, short_path_matrix)
         wasserstein_one = ot.emd2(source_dist, target_dist, short_path_matrix)
         edge_weight = self.G.edges[source_node, target_node][self.weight_key]
         curvature = 1 - (wasserstein_one / edge_weight)
@@ -149,8 +150,8 @@ class OllivierRicciCurvature(GraphMetric):
 
         Returns
         -------
-        neighbors : numpy array
-            array of indices of nearest neighbor nodes of input node
+        neighbors : list
+            list of indices or tuples of nearest neighbor nodes of input node
         distribution : numpy array
             array of mass at each node in array neighbors
 
@@ -170,7 +171,7 @@ class OllivierRicciCurvature(GraphMetric):
                 )
                 for neighbor in neighbors
             ]
-        return np.array(neighbors + [node]), np.array(distribution + [alpha])
+        return neighbors + [node], np.array(distribution + [alpha]) #return neighbors as list for nx.shortest_path_length
 
     def _get_shortest_path_matrix(self, source_neighborhood, target_neighborhood):
         """
@@ -195,7 +196,7 @@ class OllivierRicciCurvature(GraphMetric):
         return np.array(
             [
                 [
-                    nx.shortest_path_length(self.G, source, target)
+                    nx.shortest_path_length(self.G, source, target, weight=self.weight_key)
                     for target in target_neighborhood
                 ]
                 for source in source_neighborhood
