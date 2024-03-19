@@ -80,6 +80,6 @@ def test_weighted_ricci_curvature(simple_weighted_graph):
     obj = OllivierRicciCurvature(simple_weighted_graph)
     obj._calculate_ricci_curvature()
     assert list(obj.G.edges.data()) == [
-        (1, 2, {"weight": 0.5, "ricci_curvature": pytest.approx(0.6)}),
-        (1, 3, {"weight": 2, "ricci_curvature": pytest.approx(0.6)}),
+        (1, 2, {"weight": 0.5, "ricci_curvature": pytest.approx(0.5)}),
+        (1, 3, {"weight": 2, "ricci_curvature": pytest.approx(0.5)}),
     ]

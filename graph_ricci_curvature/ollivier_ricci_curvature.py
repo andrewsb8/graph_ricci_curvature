@@ -122,16 +122,6 @@ class OllivierRicciCurvature(GraphMetric):
         curvature = 1 - (wasserstein_one / edge_weight)
         return curvature
 
-    def _get_neighbors(self, node):
-        return list(self.G.neighbors(node))
-
-    def _calculate_weight_sum(self, node, neighbors):
-        """
-        Calculate sum of weights of edges connected to a given node
-
-        """
-        return sum([self.G[node][neighbor][self.weight_key] for neighbor in neighbors])
-
     def _neighborhood_mass_distribution(self, node, alpha=0.5):
         """
         Alpha is a hyperparameter such that 1 - alpha mass is distributed from
@@ -149,8 +139,8 @@ class OllivierRicciCurvature(GraphMetric):
 
         Returns
         -------
-        neighbors : numpy array
-            array of indices of nearest neighbor nodes of input node
+        neighbors : list
+            list of indices or tuples of nearest neighbor nodes of input node
         distribution : numpy array
             array of mass at each node in array neighbors
 
@@ -166,38 +156,8 @@ class OllivierRicciCurvature(GraphMetric):
             distribution = [
                 (
                     (1 - alpha)
-                    * (1 - (self.G[node][neighbor][self.weight_key] / weight_sum))
+                    * ((1 - (self.G[node][neighbor][self.weight_key] / weight_sum))/(num_neighbors-1))
                 )
                 for neighbor in neighbors
             ]
-        return np.array(neighbors + [node]), np.array(distribution + [alpha])
-
-    def _get_shortest_path_matrix(self, source_neighborhood, target_neighborhood):
-        """
-        Find shortest distance between every node in source neighborhood
-        (attached to source node by one edge) and every node in target
-        neighborhood
-
-        Parameters
-        ----------
-        source_neighborhood : list
-            list of node index values (ints or tuples) of a source node and its neighbors
-        target_neighborhood : list
-            list of node index values (ints or tuples) of a source node and its neighbors
-
-        Returns
-        -------
-        numpy array of shape len(source_neighbors) x len(target_neighborhood) including
-        shortest path matrices between nodes in source neighborhood and nodes in target
-        neighborhood
-
-        """
-        return np.array(
-            [
-                [
-                    nx.shortest_path_length(self.G, source, target)
-                    for target in target_neighborhood
-                ]
-                for source in source_neighborhood
-            ]
-        )
+        return neighbors + [node], np.array(distribution + [alpha]) #return neighbors as list for nx.shortest_path_length
