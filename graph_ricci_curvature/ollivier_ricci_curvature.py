@@ -59,9 +59,10 @@ class OllivierRicciCurvature(GraphMetric):
             node: self._calculate_node_curvature(node, norm) for node in self.G.nodes()
         }
         nx.set_node_attributes(self.G, node_curvature, "ricci_curvature")
-        self.G.graph["graph_ricci_curvature"], self.G.graph["norm_graph_ricci_curvature"] = (
-            self._calculate_graph_curvature()
-        )
+        (
+            self.G.graph["graph_ricci_curvature"],
+            self.G.graph["norm_graph_ricci_curvature"],
+        ) = self._calculate_graph_curvature()
 
     def _calculate_graph_curvature(self):
         """
@@ -107,10 +108,7 @@ class OllivierRicciCurvature(GraphMetric):
             )
         else:
             return sum(
-                [
-                    self.G[node][neighbor]["ricci_curvature"]
-                    for neighbor in neighbors
-                ]
+                [self.G[node][neighbor]["ricci_curvature"] for neighbor in neighbors]
             )
 
     def _calculate_edge_curvature(self, source_node, target_node, alpha=0.5):
