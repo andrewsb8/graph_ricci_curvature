@@ -26,7 +26,7 @@ class OllivierRicciCurvature(GraphMetric):
     def __init__(self, G: nx.Graph, weight_key="weight"):
         super().__init__(G, weight_key)
 
-    def _calculate_ricci_curvature(self, alpha=0.5):
+    def _calculate_ricci_curvature(self, alpha=0.5, norm=True):
         """
         Calculate nonzero values of Ricci curvature tensor for all edges in
         graph self.G
@@ -36,6 +36,8 @@ class OllivierRicciCurvature(GraphMetric):
         alpha : float
             hyperparameter (0 <= alpha <=1) determining how much mass to move
             from node
+        norm : bool
+            if True, normalize nodal scalar curvature
 
         Returns
         -------
@@ -54,36 +56,60 @@ class OllivierRicciCurvature(GraphMetric):
         nx.set_edge_attributes(self.G, ricci_tensor, "ricci_curvature")
 
         node_curvature = {
-            node: self._calculate_node_curvature(node) for node in self.G.nodes()
+            node: self._calculate_node_curvature(node, norm) for node in self.G.nodes()
         }
         nx.set_node_attributes(self.G, node_curvature, "ricci_curvature")
+        (
+            self.G.graph["graph_ricci_curvature"],
+            self.G.graph["norm_graph_ricci_curvature"],
+        ) = self._calculate_graph_curvature()
 
-    def _calculate_node_curvature(self, node):
+    def _calculate_graph_curvature(self):
         """
-        Calculates normalized nodal scalar Ricci Curvature (i.e. contracting
-        the curvature tensor) as described in Sandhu et al., Scientific Reports,
-        2015, DOi: 10.1038/srep12323
+        Calculate both normalized and unnormalized sums of scalar nodal ricci
+        curvature for a graph
+
+        """
+
+        graph_curvature = 0
+        for node in self.G.nodes.data():
+            graph_curvature += node[1]["ricci_curvature"]
+        graph_curvature_norm = graph_curvature / self.G.number_of_nodes()
+        return graph_curvature, graph_curvature_norm
+
+    def _calculate_node_curvature(self, node, norm=True):
+        """
+        Calculates normalized, or unnormalized, nodal scalar Ricci Curvature
+        (i.e. contracting the curvature tensor) as described in Sandhu et al.,
+        Scientific Reports, 2015, DOi: 10.1038/srep12323
 
         Parameters
         ----------
         node : int or tuple
             index of node in graph self.G
+        norm : bool
+            if True, normalize scalar curvature by edge weights
 
         Returns
         -------
-        Normalized sum of edge curvatures of node and its neighbors. Normalized
-        by edge weights
+        Sum of edge curvatures of node and its neighbors. If norm == True,
+        sums are normalized by edge weights of node
 
         """
         neighbors = self._get_neighbors(node)
-        weight_sum = self._calculate_weight_sum(node, neighbors)
-        return sum(
-            [
-                self.G[node][neighbor]["ricci_curvature"]
-                * (self.G[node][neighbor][self.weight_key] / weight_sum)
-                for neighbor in neighbors
-            ]
-        )
+        if norm:
+            weight_sum = self._calculate_weight_sum(node, neighbors)
+            return sum(
+                [
+                    self.G[node][neighbor]["ricci_curvature"]
+                    * (self.G[node][neighbor][self.weight_key] / weight_sum)
+                    for neighbor in neighbors
+                ]
+            )
+        else:
+            return sum(
+                [self.G[node][neighbor]["ricci_curvature"] for neighbor in neighbors]
+            )
 
     def _calculate_edge_curvature(self, source_node, target_node, alpha=0.5):
         """
@@ -156,8 +182,13 @@ class OllivierRicciCurvature(GraphMetric):
             distribution = [
                 (
                     (1 - alpha)
-                    * ((1 - (self.G[node][neighbor][self.weight_key] / weight_sum))/(num_neighbors-1))
+                    * (
+                        (1 - (self.G[node][neighbor][self.weight_key] / weight_sum))
+                        / (num_neighbors - 1)
+                    )
                 )
                 for neighbor in neighbors
             ]
-        return neighbors + [node], np.array(distribution + [alpha]) #return neighbors as list for nx.shortest_path_length
+        return neighbors + [node], np.array(
+            distribution + [alpha]
+        )  # return neighbors as list for nx.shortest_path_length

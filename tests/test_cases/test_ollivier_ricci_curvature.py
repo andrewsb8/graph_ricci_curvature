@@ -62,6 +62,21 @@ def test_node_curvature(simple_graph):
     ]
 
 
+def test_unnormed_node_curvature(simple_graph):
+    """
+    Test calculation of unnormalized nodal scalar curvature from the Ricci
+    Curvature tensor
+
+    """
+    obj = OllivierRicciCurvature(simple_graph)
+    obj._calculate_ricci_curvature(norm=False)
+    assert list(obj.G.nodes.data()) == [
+        (1, {"ricci_curvature": 1.0}),
+        (2, {"ricci_curvature": 0.5}),
+        (3, {"ricci_curvature": 0.5}),
+    ]
+
+
 def test_weighted_mass_distribution(simple_weighted_graph):
     """
     Test that mass distribution among neighborhoods works with weighted edges
