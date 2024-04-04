@@ -55,7 +55,7 @@ class GraphMetric(ABC):
 
         """
         return sum([self.G[node][neighbor][self.weight_key] for neighbor in neighbors])
-    
+
     def _get_shortest_path_matrix(self, source_neighborhood, target_neighborhood):
         """
         Find shortest distance between every node in source neighborhood
@@ -79,7 +79,9 @@ class GraphMetric(ABC):
         return np.array(
             [
                 [
-                    nx.shortest_path_length(self.G, source, target, weight=self.weight_key)
+                    nx.shortest_path_length(
+                        self.G, source, target, weight=self.weight_key
+                    )
                     for target in target_neighborhood
                 ]
                 for source in source_neighborhood

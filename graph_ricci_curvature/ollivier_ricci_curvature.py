@@ -57,6 +57,22 @@ class OllivierRicciCurvature(GraphMetric):
             node: self._calculate_node_curvature(node) for node in self.G.nodes()
         }
         nx.set_node_attributes(self.G, node_curvature, "ricci_curvature")
+        self.G.graph["graph_ricci_curvature"], self.G.graph["norm_graph_ricci_curvature"] = (
+            self._calculate_graph_curvature()
+        )
+
+    def _calculate_graph_curvature(self):
+        """
+        Calculate both normalized and unnormalized sums of scalar nodal ricci
+        curvature for a graph
+
+        """
+
+        graph_curvature = 0
+        for node in self.G.nodes.data():
+            graph_curvature += node[1]["ricci_curvature"]
+        graph_curvature_norm = graph_curvature / self.G.number_of_nodes()
+        return graph_curvature, graph_curvature_norm
 
     def _calculate_node_curvature(self, node):
         """
@@ -156,8 +172,13 @@ class OllivierRicciCurvature(GraphMetric):
             distribution = [
                 (
                     (1 - alpha)
-                    * ((1 - (self.G[node][neighbor][self.weight_key] / weight_sum))/(num_neighbors-1))
+                    * (
+                        (1 - (self.G[node][neighbor][self.weight_key] / weight_sum))
+                        / (num_neighbors - 1)
+                    )
                 )
                 for neighbor in neighbors
             ]
-        return neighbors + [node], np.array(distribution + [alpha]) #return neighbors as list for nx.shortest_path_length
+        return neighbors + [node], np.array(
+            distribution + [alpha]
+        )  # return neighbors as list for nx.shortest_path_length

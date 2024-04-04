@@ -31,6 +31,7 @@ g = OllivierRicciCurvature(G)
 g._calculate_ricci_curvature()
 print(list(g.G.edges.data()))
 print(list(g.G.nodes.data()))
+print(g.G.graph["graph_ricci_curvature"], g.G.graph["norm_graph_ricci_curvature"])
 ```
 
 Output:
@@ -45,4 +46,5 @@ Output:
 (2, {'ricci_curvature': 0.5}),
 (3, {'ricci_curvature': 0.5})
 ]
+1.5 0.5
 ```
