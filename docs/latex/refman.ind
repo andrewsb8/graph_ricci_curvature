@@ -1,0 +1,23 @@
+\begin{theindex}
+
+  \item {calculate\_edge\_curvature}
+    \subitem {graph\_ricci\_curvature.ollivier\_ricci\_curvature.OllivierRicciCurvature}, 
+		\hyperpage{12}
+  \item {calculate\_ricci\_curvature}
+    \subitem {graph\_ricci\_curvature.ollivier\_ricci\_curvature.OllivierRicciCurvature}, 
+		\hyperpage{13}
+
+  \indexspace
+
+  \item {graph\_ricci\_curvature.graph\_metric.GraphMetric}, 
+		\hyperpage{9}
+  \item {graph\_ricci\_curvature.ollivier\_ricci\_curvature}, 
+		\hyperpage{7}
+  \item {graph\_ricci\_curvature.ollivier\_ricci\_curvature.OllivierRicciCurvature}, 
+		\hyperpage{11}
+    \subitem {calculate\_edge\_curvature}, \hyperpage{12}
+    \subitem {calculate\_ricci\_curvature}, \hyperpage{13}
+  \item {graph\_ricci\_curvature.ricci\_curvature.RicciCurvature}, 
+		\hyperpage{14}
+
+\end{theindex}

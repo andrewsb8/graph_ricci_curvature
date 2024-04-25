@@ -26,7 +26,7 @@ class OllivierRicciCurvature(RicciCurvature):
     def __init__(self, G: nx.Graph, weight_key="weight"):
         super().__init__(G, weight_key)
 
-    def _calculate_ricci_curvature(self, alpha=0.5, norm=True):
+    def calculate_ricci_curvature(self, alpha=0.5, norm=True):
         """
         Calculate nonzero values of Ricci curvature tensor for all edges in
         graph self.G
@@ -50,7 +50,7 @@ class OllivierRicciCurvature(RicciCurvature):
             raise ValueError("alpha must be set between 0 and 1")
 
         ricci_tensor = {
-            edge: self._calculate_edge_curvature(edge[0], edge[1], alpha)
+            edge: self.calculate_edge_curvature(edge[0], edge[1], alpha)
             for edge in self.G.edges()
         }
         nx.set_edge_attributes(self.G, ricci_tensor, "ricci_curvature")
@@ -64,7 +64,7 @@ class OllivierRicciCurvature(RicciCurvature):
             self.G.graph["norm_graph_ricci_curvature"],
         ) = self._calculate_graph_curvature()
 
-    def _calculate_edge_curvature(self, source_node, target_node, alpha=0.5):
+    def calculate_edge_curvature(self, source_node, target_node, alpha=0.5):
         """
         Calculate value of Ricci Curvature tensor associated with an edge
         between a source and target node defined as
