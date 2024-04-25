@@ -23,7 +23,7 @@ class OllivierRicciCurvature(RicciCurvature):
 
     """
 
-    def __init__(self, G: nx.Graph, weight_key):
+    def __init__(self, G: nx.Graph, weight_key = "weight"):
         super().__init__(G, weight_key)
 
     def calculate_ricci_curvature(self, alpha=0.5, norm=True):

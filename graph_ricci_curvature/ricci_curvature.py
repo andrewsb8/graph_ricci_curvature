@@ -14,7 +14,7 @@ class RicciCurvature(GraphMetric):
 
     """
 
-    def __init__(self, G: nx.Graph, weight_key="weight"):
+    def __init__(self, G: nx.Graph, weight_key):
         super().__init__(G, weight_key)
 
     def _calculate_graph_curvature(self):
