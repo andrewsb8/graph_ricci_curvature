@@ -1,6 +1,6 @@
 # Constructing docs with Sphinx
 
-This README closely follows (this tutorial)[https://towardsdatascience.com/documenting-python-code-with-sphinx-554e1d6c4f6d] but some changes because of newer versions are required.
+This README closely follows [this tutorial](https://towardsdatascience.com/documenting-python-code-with-sphinx-554e1d6c4f6d) but some changes because of newer versions are required.
 
 ## Installation
 
