@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>graph_ricci_curvature.ollivier_ricci_curvature &#8212; graph_ricci_curvature 0.1.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=d1102ebc" />
+    <link rel="stylesheet" type="text/css" href="../../_static/alabaster.css?v=12dfc556" />
+    <script src="../../_static/documentation_options.js?v=01f34227"></script>
+    <script src="../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for graph_ricci_curvature.ollivier_ricci_curvature</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">References:</span>
+<span class="sd">    - Ollivier, Y. 2009. &quot;Ricci curvature of Markov chains on metric spaces&quot;. Journal of Functional Analysis, 256(3), 810-864.</span>
+<span class="sd">    - Sandhu et al. 2015. &quot;Graph Curvature for Differentiating Cancer Networks&quot;. Scientific Reports. DOi: 10.1038/srep12323</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">networkx</span> <span class="k">as</span> <span class="nn">nx</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">ot</span>
+<span class="kn">from</span> <span class="nn">graph_ricci_curvature.graph_metric</span> <span class="kn">import</span> <span class="n">GraphMetric</span>
+
+
+<div class="viewcode-block" id="OllivierRicciCurvature">
+<a class="viewcode-back" href="../../graph_ricci_curvature.html#graph_ricci_curvature.ollivier_ricci_curvature.OllivierRicciCurvature">[docs]</a>
+<span class="k">class</span> <span class="nc">OllivierRicciCurvature</span><span class="p">(</span><span class="n">GraphMetric</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Class for calculating Ollivier Ricci Curvature</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    G : networkx graph</span>
+<span class="sd">        Input graph</span>
+<span class="sd">    weight_key : str</span>
+<span class="sd">        key to specify edge weights in networkx dictionary. Default = weight</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">G</span><span class="p">:</span> <span class="n">nx</span><span class="o">.</span><span class="n">Graph</span><span class="p">,</span> <span class="n">weight_key</span><span class="o">=</span><span class="s2">&quot;weight&quot;</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="n">weight_key</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_calculate_ricci_curvature</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">norm</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Calculate nonzero values of Ricci curvature tensor for all edges in</span>
+<span class="sd">        graph self.G</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        alpha : float</span>
+<span class="sd">            hyperparameter (0 &lt;= alpha &lt;=1) determining how much mass to move</span>
+<span class="sd">            from node</span>
+<span class="sd">        norm : bool</span>
+<span class="sd">            if True, normalize nodal scalar curvature</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        self.G : networkx graph</span>
+<span class="sd">            Returns graph with ricci_curvature as node and edge attributes</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="n">alpha</span> <span class="o">&gt;=</span> <span class="mi">1</span> <span class="ow">or</span> <span class="n">alpha</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;alpha must be set between 0 and 1&quot;</span><span class="p">)</span>
+
+        <span class="n">ricci_tensor</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="n">edge</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_calculate_edge_curvature</span><span class="p">(</span><span class="n">edge</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">edge</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">alpha</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">edge</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">G</span><span class="o">.</span><span class="n">edges</span><span class="p">()</span>
+        <span class="p">}</span>
+        <span class="n">nx</span><span class="o">.</span><span class="n">set_edge_attributes</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">G</span><span class="p">,</span> <span class="n">ricci_tensor</span><span class="p">,</span> <span class="s2">&quot;ricci_curvature&quot;</span><span class="p">)</span>
+
+        <span class="n">node_curvature</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="n">node</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_calculate_node_curvature</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">norm</span><span class="p">)</span> <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">G</span><span class="o">.</span><span class="n">nodes</span><span class="p">()</span>
+        <span class="p">}</span>
+        <span class="n">nx</span><span class="o">.</span><span class="n">set_node_attributes</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">G</span><span class="p">,</span> <span class="n">node_curvature</span><span class="p">,</span> <span class="s2">&quot;ricci_curvature&quot;</span><span class="p">)</span>
+        <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">G</span><span class="o">.</span><span class="n">graph</span><span class="p">[</span><span class="s2">&quot;graph_ricci_curvature&quot;</span><span class="p">],</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">G</span><span class="o">.</span><span class="n">graph</span><span class="p">[</span><span class="s2">&quot;norm_graph_ricci_curvature&quot;</span><span class="p">],</span>
+        <span class="p">)</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_calculate_graph_curvature</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">_calculate_graph_curvature</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Calculate both normalized and unnormalized sums of scalar nodal ricci</span>
+<span class="sd">        curvature for a graph</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">graph_curvature</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">G</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">data</span><span class="p">():</span>
+            <span class="n">graph_curvature</span> <span class="o">+=</span> <span class="n">node</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="s2">&quot;ricci_curvature&quot;</span><span class="p">]</span>
+        <span class="n">graph_curvature_norm</span> <span class="o">=</span> <span class="n">graph_curvature</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">G</span><span class="o">.</span><span class="n">number_of_nodes</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">graph_curvature</span><span class="p">,</span> <span class="n">graph_curvature_norm</span>
+
+    <span class="k">def</span> <span class="nf">_calculate_node_curvature</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">,</span> <span class="n">norm</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Calculates normalized, or unnormalized, nodal scalar Ricci Curvature</span>
+<span class="sd">        (i.e. contracting the curvature tensor) as described in Sandhu et al.,</span>
+<span class="sd">        Scientific Reports, 2015, DOi: 10.1038/srep12323</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        node : int or tuple</span>
+<span class="sd">            index of node in graph self.G</span>
+<span class="sd">        norm : bool</span>
+<span class="sd">            if True, normalize scalar curvature by edge weights</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Sum of edge curvatures of node and its neighbors. If norm == True,</span>
+<span class="sd">        sums are normalized by edge weights of node</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">neighbors</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_neighbors</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">norm</span><span class="p">:</span>
+            <span class="n">weight_sum</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_calculate_weight_sum</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">neighbors</span><span class="p">)</span>
+            <span class="k">return</span> <span class="nb">sum</span><span class="p">(</span>
+                <span class="p">[</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">G</span><span class="p">[</span><span class="n">node</span><span class="p">][</span><span class="n">neighbor</span><span class="p">][</span><span class="s2">&quot;ricci_curvature&quot;</span><span class="p">]</span>
+                    <span class="o">*</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">G</span><span class="p">[</span><span class="n">node</span><span class="p">][</span><span class="n">neighbor</span><span class="p">][</span><span class="bp">self</span><span class="o">.</span><span class="n">weight_key</span><span class="p">]</span> <span class="o">/</span> <span class="n">weight_sum</span><span class="p">)</span>
+                    <span class="k">for</span> <span class="n">neighbor</span> <span class="ow">in</span> <span class="n">neighbors</span>
+                <span class="p">]</span>
+            <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">sum</span><span class="p">(</span>
+                <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">G</span><span class="p">[</span><span class="n">node</span><span class="p">][</span><span class="n">neighbor</span><span class="p">][</span><span class="s2">&quot;ricci_curvature&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">neighbor</span> <span class="ow">in</span> <span class="n">neighbors</span><span class="p">]</span>
+            <span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_calculate_edge_curvature</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">source_node</span><span class="p">,</span> <span class="n">target_node</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Calculate value of Ricci Curvature tensor associated with an edge</span>
+<span class="sd">        between a source and target node defined as</span>
+
+<span class="sd">        1 - ( Wasserstein 1 Distance / Edge Weight )</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        source_node : int or tuple</span>
+<span class="sd">            index of source_node in graph self.G</span>
+<span class="sd">        target_node : int or tuple</span>
+<span class="sd">            index of target node in graph self.G</span>
+<span class="sd">        alpha : float</span>
+<span class="sd">            hyperparameter (0 &lt;= alpha &lt;=1) determining how much mass to move</span>
+<span class="sd">            from node</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        curvature : float</span>
+<span class="sd">            value of curvature tensor</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">source_neighbors</span><span class="p">,</span> <span class="n">source_dist</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_neighborhood_mass_distribution</span><span class="p">(</span>
+            <span class="n">source_node</span><span class="p">,</span> <span class="n">alpha</span>
+        <span class="p">)</span>
+        <span class="n">target_neighbors</span><span class="p">,</span> <span class="n">target_dist</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_neighborhood_mass_distribution</span><span class="p">(</span>
+            <span class="n">target_node</span><span class="p">,</span> <span class="n">alpha</span>
+        <span class="p">)</span>
+        <span class="n">short_path_matrix</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_shortest_path_matrix</span><span class="p">(</span>
+            <span class="n">source_neighbors</span><span class="p">,</span> <span class="n">target_neighbors</span>
+        <span class="p">)</span>
+        <span class="n">wasserstein_one</span> <span class="o">=</span> <span class="n">ot</span><span class="o">.</span><span class="n">emd2</span><span class="p">(</span><span class="n">source_dist</span><span class="p">,</span> <span class="n">target_dist</span><span class="p">,</span> <span class="n">short_path_matrix</span><span class="p">)</span>
+        <span class="n">edge_weight</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">G</span><span class="o">.</span><span class="n">edges</span><span class="p">[</span><span class="n">source_node</span><span class="p">,</span> <span class="n">target_node</span><span class="p">][</span><span class="bp">self</span><span class="o">.</span><span class="n">weight_key</span><span class="p">]</span>
+        <span class="n">curvature</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="p">(</span><span class="n">wasserstein_one</span> <span class="o">/</span> <span class="n">edge_weight</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">curvature</span>
+
+    <span class="k">def</span> <span class="nf">_neighborhood_mass_distribution</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Alpha is a hyperparameter such that 1 - alpha mass is distributed from</span>
+<span class="sd">        a node to its nearest neighbors according to edge weights. Default is</span>
+<span class="sd">        0.5 but can be changed by producing it as an argument to</span>
+<span class="sd">        _calculate_ricci_curvature</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        node : int or tuple</span>
+<span class="sd">            index of node of graph self.G</span>
+<span class="sd">        alpha : float</span>
+<span class="sd">            hyperparameter (0 &lt;= alpha &lt;=1) determining how much mass to move</span>
+<span class="sd">            from node</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        neighbors : list</span>
+<span class="sd">            list of indices or tuples of nearest neighbor nodes of input node</span>
+<span class="sd">        distribution : numpy array</span>
+<span class="sd">            array of mass at each node in array neighbors</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">neighbors</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_neighbors</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
+        <span class="n">num_neighbors</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">neighbors</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">num_neighbors</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">[</span><span class="n">node</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="n">num_neighbors</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">distribution</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span> <span class="o">-</span> <span class="n">alpha</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">weight_sum</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_calculate_weight_sum</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">neighbors</span><span class="p">)</span>
+            <span class="n">distribution</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="p">(</span>
+                    <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">alpha</span><span class="p">)</span>
+                    <span class="o">*</span> <span class="p">(</span>
+                        <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">G</span><span class="p">[</span><span class="n">node</span><span class="p">][</span><span class="n">neighbor</span><span class="p">][</span><span class="bp">self</span><span class="o">.</span><span class="n">weight_key</span><span class="p">]</span> <span class="o">/</span> <span class="n">weight_sum</span><span class="p">))</span>
+                        <span class="o">/</span> <span class="p">(</span><span class="n">num_neighbors</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+                    <span class="p">)</span>
+                <span class="p">)</span>
+                <span class="k">for</span> <span class="n">neighbor</span> <span class="ow">in</span> <span class="n">neighbors</span>
+            <span class="p">]</span>
+        <span class="k">return</span> <span class="n">neighbors</span> <span class="o">+</span> <span class="p">[</span><span class="n">node</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
+            <span class="n">distribution</span> <span class="o">+</span> <span class="p">[</span><span class="n">alpha</span><span class="p">]</span>
+        <span class="p">)</span>  <span class="c1"># return neighbors as list for nx.shortest_path_length</span></div>
+
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../index.html">graph_ricci_curvature</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &#169;2024, Brian Andrews.
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 7.3.7</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 0.7.16</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>
