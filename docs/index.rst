@@ -10,7 +10,7 @@ Welcome to graph_ricci_curvature's documentation!
    :maxdepth: 2
    :caption: Contents:
 
-
+   modules
 
 Indices and tables
 ==================

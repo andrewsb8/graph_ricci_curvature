@@ -3,7 +3,7 @@ from graph_ricci_curvature.graph_metric import GraphMetric
 
 class RicciCurvature(GraphMetric):
     """
-    Class for calculating Ollivier Ricci Curvature
+    Class for storing information about the Ricci Curvature Tensor
 
     Parameters
     ----------
