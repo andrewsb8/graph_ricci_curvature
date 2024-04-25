@@ -19,11 +19,11 @@ class OllivierRicciCurvature(RicciCurvature):
     G : networkx graph
         Input graph
     weight_key : str
-        key to specify edge weights in networkx dictionary. Default = weight
+        key to specify edge weights in networkx dictionary.
 
     """
 
-    def __init__(self, G: nx.Graph, weight_key="weight"):
+    def __init__(self, G: nx.Graph, weight_key):
         super().__init__(G, weight_key)
 
     def calculate_ricci_curvature(self, alpha=0.5, norm=True):
