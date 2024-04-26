@@ -30,9 +30,9 @@ Move out of ```docs``` to your repositories top level directory and run
 
 ```sphinx-apidoc -o docs /path/to/source/files```
 
-where the second path is replaced with the path to the directory you want to document. This generates a modules.rst to your ```docs``` folder. Move back into your docs folder.  Add ```modules``` under ```:caption: Contents:``` in your ```index.rst``` file.
+where the second path is replaced with the path to the directory you want to document. This generates a ```modules.rst``` to your ```docs``` folder. Move back into your docs folder.  Add ```modules``` under ```:caption: Contents:``` in your ```index.rst``` file.
 
-Now, run ```make html``` to generate documentation in html formatting. It will appear in ```_build/source```.
+Now, run ```make html``` to generate documentation in html formatting or ```make pdflatex``` to generate latex source and pdf (need tex live installed). It will appear in ```_build/source```.
 
 ## Change the Theme - Read the Docs
 
