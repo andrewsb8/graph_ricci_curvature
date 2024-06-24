@@ -20,7 +20,17 @@ def test_calculate_edge_curvature(simple_graph):
 
     """
     obj = OllivierRicciCurvature(simple_graph)
-    assert obj._calculate_edge_curvature(1, 2) == 0.5
+    assert obj.calculate_edge_curvature(1, 2) == 0.5
+
+
+def test_calculate_edge_curvature_sinkhorn(simple_graph):
+    """
+    Test for correct value of Ricci Curvature of an edge in a simple graph using
+    sinkhorn divergence
+
+    """
+    obj = OllivierRicciCurvature(simple_graph, method="sinkhorn")
+    assert obj.calculate_edge_curvature(1, 2) == pytest.approx(0.5, 0.001)
 
 
 def test_tensor_symmetry(simple_graph):
@@ -30,7 +40,7 @@ def test_tensor_symmetry(simple_graph):
 
     """
     obj = OllivierRicciCurvature(simple_graph)
-    assert obj._calculate_edge_curvature(1, 2) == obj._calculate_edge_curvature(2, 1)
+    assert obj.calculate_edge_curvature(1, 2) == obj.calculate_edge_curvature(2, 1)
 
 
 def test_ricci_tensor(simple_graph):
@@ -40,7 +50,7 @@ def test_ricci_tensor(simple_graph):
 
     """
     obj = OllivierRicciCurvature(simple_graph)
-    obj._calculate_ricci_curvature()
+    obj.calculate_ricci_curvature()
     assert list(obj.G.edges.data()) == [
         (1, 2, {"weight": 1.0, "ricci_curvature": 0.5}),
         (1, 3, {"weight": 1.0, "ricci_curvature": 0.5}),
@@ -54,7 +64,7 @@ def test_node_curvature(simple_graph):
 
     """
     obj = OllivierRicciCurvature(simple_graph)
-    obj._calculate_ricci_curvature()
+    obj.calculate_ricci_curvature()
     assert list(obj.G.nodes.data()) == [
         (1, {"ricci_curvature": 0.5}),
         (2, {"ricci_curvature": 0.5}),
@@ -69,7 +79,7 @@ def test_unnormed_node_curvature(simple_graph):
 
     """
     obj = OllivierRicciCurvature(simple_graph)
-    obj._calculate_ricci_curvature(norm=False)
+    obj.calculate_ricci_curvature(norm=False)
     assert list(obj.G.nodes.data()) == [
         (1, {"ricci_curvature": 1.0}),
         (2, {"ricci_curvature": 0.5}),
@@ -93,7 +103,7 @@ def test_weighted_ricci_curvature(simple_weighted_graph):
 
     """
     obj = OllivierRicciCurvature(simple_weighted_graph)
-    obj._calculate_ricci_curvature()
+    obj.calculate_ricci_curvature()
     assert list(obj.G.edges.data()) == [
         (1, 2, {"weight": 0.5, "ricci_curvature": pytest.approx(0.5)}),
         (1, 3, {"weight": 2, "ricci_curvature": pytest.approx(0.5)}),
