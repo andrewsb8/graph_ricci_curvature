@@ -106,9 +106,9 @@ def test_node_curvature(simple_graph):
     obj = OllivierRicciCurvature(simple_graph)
     obj.calculate_ricci_curvature()
     assert list(obj.G.nodes.data()) == [
-        (1, {"ricci_curvature": 0.5}),
-        (2, {"ricci_curvature": 0.5}),
-        (3, {"ricci_curvature": 0.5}),
+        (1, {"weight": 1.0, "ricci_curvature": 0.5}),
+        (2, {"weight": 1.0, "ricci_curvature": 0.5}),
+        (3, {"weight": 1.0, "ricci_curvature": 0.5}),
     ]
 
 
@@ -121,9 +121,9 @@ def test_unnormed_node_curvature(simple_graph):
     obj = OllivierRicciCurvature(simple_graph)
     obj.calculate_ricci_curvature(norm=False)
     assert list(obj.G.nodes.data()) == [
-        (1, {"ricci_curvature": 1.0}),
-        (2, {"ricci_curvature": 0.5}),
-        (3, {"ricci_curvature": 0.5}),
+        (1, {"weight": 1.0, "ricci_curvature": 1.0}),
+        (2, {"weight": 1.0, "ricci_curvature": 0.5}),
+        (3, {"weight": 1.0, "ricci_curvature": 0.5}),
     ]
 
 
