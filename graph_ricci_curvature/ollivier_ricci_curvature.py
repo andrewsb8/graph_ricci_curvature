@@ -19,18 +19,28 @@ class OllivierRicciCurvature(RicciCurvature):
     G : networkx graph
         Input graph
     weight_key : str
-        key to specify edge weights in networkx dictionary. Default = weight
+        Key to specify edge weights in networkx dictionary. Default = weight
     method : str
-        method for calculating optimal transport plan. Options: otd (optimal transport distance), sinkhorn
+        Method for calculating optimal transport plan. Options: otd (optimal transport distance), sinkhorn
+    numThreads : int
+        Specify number of threads for optimal transport plan. Only for "otd" method.
+    reg : float
+        Regularization term to be used with "sinkhorn" method
 
     """
 
-    def __init__(self, G: nx.Graph, weight_key="weight", method="otd"):
+    def __init__(
+        self, G: nx.Graph, weight_key="weight", method="otd", numThreads=1, reg=0.1
+    ):
         super().__init__(G, weight_key)
-        if method == "otd" or method == "sinkhorn":
+        if method == "otd":
             self.method = method
+            self.numThreads = numThreads
+        elif method == "sinkhorn":
+            self.method = method
+            self.reg = reg
         else:
-            raise ValueError(
+            raise NotImplementedError(
                 "Specified method not avaialbale. Available options: otd, sinkhorn."
             )
 
@@ -105,10 +115,12 @@ class OllivierRicciCurvature(RicciCurvature):
             source_neighbors, target_neighbors
         )
         if self.method == "otd":
-            opt_transport = ot.emd2(source_dist, target_dist, short_path_matrix)
+            opt_transport = ot.emd2(
+                source_dist, target_dist, short_path_matrix, numThreads=self.numThreads
+            )
         elif self.method == "sinkhorn":
             opt_transport = ot.sinkhorn2(
-                source_dist, target_dist, short_path_matrix, 0.1
+                source_dist, target_dist, short_path_matrix, reg=self.reg
             )
         edge_weight = self.G.edges[source_node, target_node][self.weight_key]
         curvature = 1 - (opt_transport / edge_weight)
