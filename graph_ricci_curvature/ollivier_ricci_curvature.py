@@ -20,31 +20,13 @@ class OllivierRicciCurvature(RicciCurvature):
         Input graph
     weight_key : str
         Key to specify edge weights in networkx dictionary. Default = weight
-    method : str
-        Method for calculating optimal transport plan. Options: otd (optimal transport distance), sinkhorn
-    numThreads : int
-        Specify number of threads for optimal transport plan. Only for "otd" method.
-    reg : float
-        Regularization term to be used with "sinkhorn" method
 
     """
 
-    def __init__(
-        self, G: nx.Graph, weight_key="weight", method="otd", numThreads=1, reg=0.1
-    ):
+    def __init__(self, G: nx.Graph, weight_key="weight"):
         super().__init__(G, weight_key)
-        if method == "otd":
-            self.method = method
-            self.numThreads = numThreads
-        elif method == "sinkhorn":
-            self.method = method
-            self.reg = reg
-        else:
-            raise NotImplementedError(
-                "Specified method not available. Available options: otd, sinkhorn."
-            )
 
-    def calculate_ricci_curvature(self, alpha=0.5, norm=True):
+    def calculate_ricci_curvature(self, alpha=0.5, norm=True, method="otd", numThreads=1, reg=0.1):
         """
         Calculate nonzero values of Ricci curvature tensor for all edges in
         graph self.G
@@ -52,10 +34,16 @@ class OllivierRicciCurvature(RicciCurvature):
         Parameters
         ----------
         alpha : float
-            hyperparameter (0 <= alpha <=1) determining how much mass to move
-            from node
+            Hyperparameter (0 <= alpha <=1) determining how much mass to move
+            from node.
         norm : bool
-            if True, normalize nodal scalar curvature
+            If True, normalize nodal scalar curvature.
+        method : str
+            Method for calculating optimal transport plan. Options: otd (optimal transport distance), sinkhorn.
+        numThreads : int
+            Specify number of threads for optimal transport plan. Only for "otd" method.
+        reg : float
+            Regularization term to be used with "sinkhorn" method.
 
         Returns
         -------
@@ -67,8 +55,13 @@ class OllivierRicciCurvature(RicciCurvature):
         if alpha >= 1 or alpha <= 0:
             raise ValueError("alpha must be set between 0 and 1")
 
+        if method != "otd" and method != "sinkhorn":
+            raise NotImplementedError(
+                "Specified method not available. Available options: otd, sinkhorn."
+            )
+
         ricci_tensor = {
-            edge: self.calculate_edge_curvature(edge[0], edge[1], alpha)
+            edge: self.calculate_edge_curvature(edge[0], edge[1], alpha, method, numThreads, reg)
             for edge in self.G.edges()
         }
         nx.set_edge_attributes(self.G, ricci_tensor, "ricci_curvature")
@@ -82,7 +75,7 @@ class OllivierRicciCurvature(RicciCurvature):
             self.G.graph["norm_graph_ricci_curvature"],
         ) = self._calculate_graph_curvature()
 
-    def calculate_edge_curvature(self, source_node, target_node, alpha=0.5):
+    def calculate_edge_curvature(self, source_node, target_node, alpha=0.5, method="otd", numThreads=1, reg=0.1):
         """
         Calculate value of Ricci Curvature tensor associated with an edge
         between a source and target node defined as
@@ -98,6 +91,12 @@ class OllivierRicciCurvature(RicciCurvature):
         alpha : float
             hyperparameter (0 <= alpha <=1) determining how much mass to move
             from node
+        method : str
+            Method for calculating optimal transport plan. Options: otd (optimal transport distance), sinkhorn
+        numThreads : int
+            Specify number of threads for optimal transport plan. Only for "otd" method.
+        reg : float
+            Regularization term to be used with "sinkhorn" method
 
         Returns
         -------
@@ -114,13 +113,13 @@ class OllivierRicciCurvature(RicciCurvature):
         short_path_matrix = self._get_shortest_path_matrix(
             source_neighbors, target_neighbors
         )
-        if self.method == "otd":
+        if method == "otd":
             opt_transport = ot.emd2(
-                source_dist, target_dist, short_path_matrix, numThreads=self.numThreads
+                source_dist, target_dist, short_path_matrix, numThreads=numThreads
             )
-        elif self.method == "sinkhorn":
+        elif method == "sinkhorn":
             opt_transport = ot.sinkhorn2(
-                source_dist, target_dist, short_path_matrix, reg=self.reg
+                source_dist, target_dist, short_path_matrix, reg=reg
             )
         edge_weight = self.G.edges[source_node, target_node][self.weight_key]
         curvature = 1 - (opt_transport / edge_weight)

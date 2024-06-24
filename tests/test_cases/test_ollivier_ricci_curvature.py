@@ -29,8 +29,8 @@ def test_calculate_edge_curvature_sinkhorn(simple_graph):
     sinkhorn divergence
 
     """
-    obj = OllivierRicciCurvature(simple_graph, method="sinkhorn")
-    assert obj.calculate_edge_curvature(1, 2) == pytest.approx(0.5, 0.001)
+    obj = OllivierRicciCurvature(simple_graph)
+    assert obj.calculate_edge_curvature(1, 2, method="sinkhorn") == pytest.approx(0.5, 0.001)
 
 
 def test_tensor_symmetry(simple_graph):
