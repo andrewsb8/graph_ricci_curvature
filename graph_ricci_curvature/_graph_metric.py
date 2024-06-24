@@ -51,7 +51,7 @@ class GraphMetric(ABC):
 
     def _calculate_weight_sum(self, node, neighbors):
         """
-        Calculate sum of weights of edges connected to a given node
+        Calculate sum of weights of edges connected to a given node.
 
         """
         return sum([self.G[node][neighbor][self.weight_key] for neighbor in neighbors])

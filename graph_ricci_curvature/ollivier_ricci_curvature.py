@@ -7,6 +7,7 @@ References:
 import networkx as nx
 import numpy as np
 import ot
+import math
 from graph_ricci_curvature._ricci_curvature import RicciCurvature
 
 
@@ -26,7 +27,15 @@ class OllivierRicciCurvature(RicciCurvature):
     def __init__(self, G: nx.Graph, weight_key="weight"):
         super().__init__(G, weight_key)
 
-    def calculate_ricci_curvature(self, alpha=0.5, norm=True, dist_type="uniform", method="otd", numThreads=1, reg=0.1):
+    def calculate_ricci_curvature(
+        self,
+        alpha=0.5,
+        norm=True,
+        dist_type="uniform",
+        method="otd",
+        numThreads=1,
+        reg=0.1,
+    ):
         """
         Calculate nonzero values of Ricci curvature tensor for all edges in
         graph self.G
@@ -39,7 +48,7 @@ class OllivierRicciCurvature(RicciCurvature):
         norm : bool
             If True, normalize nodal scalar curvature.
         dist_type : str
-            Distribution type for mass distribution in source or target node neighborhood. Default: uniform. Options: uniform, linear, inverse-linear.
+            Distribution type for mass distribution in source or target node neighborhood. Default: uniform. Options: uniform, linear, inverse-linear, gaussian.
         method : str
             Method for calculating optimal transport plan. Options: otd (optimal transport distance), sinkhorn.
         numThreads : int
@@ -63,7 +72,15 @@ class OllivierRicciCurvature(RicciCurvature):
             )
 
         ricci_tensor = {
-            edge: self.calculate_edge_curvature(edge[0], edge[1], alpha=alpha, dist_type=dist_type, method=method, numThreads=numThreads, reg=reg)
+            edge: self.calculate_edge_curvature(
+                edge[0],
+                edge[1],
+                alpha=alpha,
+                dist_type=dist_type,
+                method=method,
+                numThreads=numThreads,
+                reg=reg,
+            )
             for edge in self.G.edges()
         }
         nx.set_edge_attributes(self.G, ricci_tensor, "ricci_curvature")
@@ -77,7 +94,16 @@ class OllivierRicciCurvature(RicciCurvature):
             self.G.graph["norm_graph_ricci_curvature"],
         ) = self._calculate_graph_curvature()
 
-    def calculate_edge_curvature(self, source_node, target_node, alpha=0.5, dist_type="uniform", method="otd", numThreads=1, reg=0.1):
+    def calculate_edge_curvature(
+        self,
+        source_node,
+        target_node,
+        alpha=0.5,
+        dist_type="uniform",
+        method="otd",
+        numThreads=1,
+        reg=0.1,
+    ):
         """
         Calculate value of Ricci Curvature tensor associated with an edge
         between a source and target node defined as
@@ -94,7 +120,7 @@ class OllivierRicciCurvature(RicciCurvature):
             hyperparameter (0 <= alpha <=1) determining how much mass to move
             from node
         dist_type : str
-            Distribution type for mass distribution in source or target node neighborhood. Default: uniform. Options: uniform, linear, inverse-linear.
+            Distribution type for mass distribution in source or target node neighborhood. Default: uniform. Options: uniform, linear, inverse-linear, gaussian.
         method : str
             Method for calculating optimal transport plan. Options: otd (optimal transport distance), sinkhorn
         numThreads : int
@@ -144,7 +170,7 @@ class OllivierRicciCurvature(RicciCurvature):
             hyperparameter (0 <= alpha <=1) determining how much mass to move
             from node
         dist_type : str
-            Distribution type for mass distribution in source or target node neighborhood. Options: uniform, linear, inverse-linear.
+            Distribution type for mass distribution in source or target node neighborhood. Options: uniform, linear, inverse-linear, gaussian.
 
         Returns
         -------
@@ -162,10 +188,13 @@ class OllivierRicciCurvature(RicciCurvature):
             distribution = [1 - alpha]
         else:
             if dist_type == "uniform":
-                distribution = [(1 - alpha)/(num_neighbors) for neighbor in neighbors]
+                distribution = [(1 - alpha) / (num_neighbors) for neighbor in neighbors]
             elif dist_type == "linear":
                 weight_sum = self._calculate_weight_sum(node, neighbors)
-                distribution = [(1-alpha)*(self.G[node][neighbor][self.weight_key] / weight_sum) for neighbor in neighbors]
+                distribution = [
+                    (1 - alpha) * (self.G[node][neighbor][self.weight_key] / weight_sum)
+                    for neighbor in neighbors
+                ]
             elif dist_type == "inverse-linear":
                 weight_sum = self._calculate_weight_sum(node, neighbors)
                 distribution = [
@@ -178,8 +207,32 @@ class OllivierRicciCurvature(RicciCurvature):
                     )
                     for neighbor in neighbors
                 ]
+            elif dist_type == "gaussian":
+                weight_sum = self._calculate_gauss_weight_sum(node, neighbors)
+                distribution = [
+                    (1 - alpha)
+                    * (
+                        math.e ** (-self.G[node][neighbor][self.weight_key] ** 2)
+                        / weight_sum
+                    )
+                    for neighbor in neighbors
+                ]
             else:
-                raise NotImplementedError("Specified dist_type is not available. Options: uniform, linear, inverse-linear.")
+                raise NotImplementedError(
+                    "Specified dist_type is not available. Options: uniform, linear, inverse-linear, gaussian."
+                )
         return neighbors + [node], np.array(
             distribution + [alpha]
         )  # return neighbors as list for nx.shortest_path_length
+
+    def _calculate_gauss_weight_sum(self, node, neighbors):
+        """
+        Need to normalize differently if using a gaussian mass distribution
+
+        """
+        return sum(
+            [
+                math.e ** (-self.G[node][neighbor][self.weight_key] ** 2)
+                for neighbor in neighbors
+            ]
+        )
