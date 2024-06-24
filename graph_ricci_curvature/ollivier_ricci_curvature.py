@@ -7,7 +7,7 @@ References:
 import networkx as nx
 import numpy as np
 import ot
-from graph_ricci_curvature.ricci_curvature import RicciCurvature
+from graph_ricci_curvature._ricci_curvature import RicciCurvature
 
 
 class OllivierRicciCurvature(RicciCurvature):
@@ -19,14 +19,32 @@ class OllivierRicciCurvature(RicciCurvature):
     G : networkx graph
         Input graph
     weight_key : str
-        key to specify edge weights in networkx dictionary. Default = weight
+        Key to specify edge weights in networkx dictionary. Default = weight
+    method : str
+        Method for calculating optimal transport plan. Options: otd (optimal transport distance), sinkhorn
+    numThreads : int
+        Specify number of threads for optimal transport plan. Only for "otd" method.
+    reg : float
+        Regularization term to be used with "sinkhorn" method
 
     """
 
-    def __init__(self, G: nx.Graph, weight_key="weight"):
+    def __init__(
+        self, G: nx.Graph, weight_key="weight", method="otd", numThreads=1, reg=0.1
+    ):
         super().__init__(G, weight_key)
+        if method == "otd":
+            self.method = method
+            self.numThreads = numThreads
+        elif method == "sinkhorn":
+            self.method = method
+            self.reg = reg
+        else:
+            raise NotImplementedError(
+                "Specified method not avaialbale. Available options: otd, sinkhorn."
+            )
 
-    def _calculate_ricci_curvature(self, alpha=0.5, norm=True):
+    def calculate_ricci_curvature(self, alpha=0.5, norm=True):
         """
         Calculate nonzero values of Ricci curvature tensor for all edges in
         graph self.G
@@ -42,7 +60,7 @@ class OllivierRicciCurvature(RicciCurvature):
         Returns
         -------
         self.G : networkx graph
-            Returns graph with ricci_curvature as node and edge attributes
+            Returns graph with ricci_curvature as graph, node, and edge attributes
 
         """
 
@@ -50,7 +68,7 @@ class OllivierRicciCurvature(RicciCurvature):
             raise ValueError("alpha must be set between 0 and 1")
 
         ricci_tensor = {
-            edge: self._calculate_edge_curvature(edge[0], edge[1], alpha)
+            edge: self.calculate_edge_curvature(edge[0], edge[1], alpha)
             for edge in self.G.edges()
         }
         nx.set_edge_attributes(self.G, ricci_tensor, "ricci_curvature")
@@ -64,7 +82,7 @@ class OllivierRicciCurvature(RicciCurvature):
             self.G.graph["norm_graph_ricci_curvature"],
         ) = self._calculate_graph_curvature()
 
-    def _calculate_edge_curvature(self, source_node, target_node, alpha=0.5):
+    def calculate_edge_curvature(self, source_node, target_node, alpha=0.5):
         """
         Calculate value of Ricci Curvature tensor associated with an edge
         between a source and target node defined as
@@ -96,9 +114,16 @@ class OllivierRicciCurvature(RicciCurvature):
         short_path_matrix = self._get_shortest_path_matrix(
             source_neighbors, target_neighbors
         )
-        wasserstein_one = ot.emd2(source_dist, target_dist, short_path_matrix)
+        if self.method == "otd":
+            opt_transport = ot.emd2(
+                source_dist, target_dist, short_path_matrix, numThreads=self.numThreads
+            )
+        elif self.method == "sinkhorn":
+            opt_transport = ot.sinkhorn2(
+                source_dist, target_dist, short_path_matrix, reg=self.reg
+            )
         edge_weight = self.G.edges[source_node, target_node][self.weight_key]
-        curvature = 1 - (wasserstein_one / edge_weight)
+        curvature = 1 - (opt_transport / edge_weight)
         return curvature
 
     def _neighborhood_mass_distribution(self, node, alpha=0.5):

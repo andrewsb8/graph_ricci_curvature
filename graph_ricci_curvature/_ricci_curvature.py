@@ -1,5 +1,6 @@
 import networkx as nx
-from graph_ricci_curvature.graph_metric import GraphMetric
+from graph_ricci_curvature._graph_metric import GraphMetric
+
 
 class RicciCurvature(GraphMetric):
     """
