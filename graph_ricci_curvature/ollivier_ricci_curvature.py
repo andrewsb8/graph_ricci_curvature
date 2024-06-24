@@ -41,7 +41,7 @@ class OllivierRicciCurvature(RicciCurvature):
             self.reg = reg
         else:
             raise NotImplementedError(
-                "Specified method not avaialbale. Available options: otd, sinkhorn."
+                "Specified method not available. Available options: otd, sinkhorn."
             )
 
     def calculate_ricci_curvature(self, alpha=0.5, norm=True):
