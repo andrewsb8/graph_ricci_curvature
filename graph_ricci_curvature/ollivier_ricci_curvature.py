@@ -68,7 +68,7 @@ class OllivierRicciCurvature(RicciCurvature):
 
         if method != "otd" and method != "sinkhorn":
             raise NotImplementedError(
-                "Specified method not available. Available options: otd, sinkhorn."
+                "Specified optimal transport method not available. Options: otd, sinkhorn."
             )
 
         ricci_tensor = {
@@ -168,7 +168,7 @@ class OllivierRicciCurvature(RicciCurvature):
             index of node of graph self.G
         alpha : float
             hyperparameter (0 <= alpha <=1) determining how much mass to move
-            from node
+            from source node
         dist_type : str
             Distribution type for mass distribution in source or target node neighborhood. Options: uniform, linear, inverse-linear, gaussian.
 
