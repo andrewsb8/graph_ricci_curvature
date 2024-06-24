@@ -7,6 +7,7 @@ References:
 import networkx as nx
 import numpy as np
 import ot
+import math
 from graph_ricci_curvature._ricci_curvature import RicciCurvature
 
 
@@ -20,31 +21,21 @@ class OllivierRicciCurvature(RicciCurvature):
         Input graph
     weight_key : str
         Key to specify edge weights in networkx dictionary. Default = weight
-    method : str
-        Method for calculating optimal transport plan. Options: otd (optimal transport distance), sinkhorn
-    numThreads : int
-        Specify number of threads for optimal transport plan. Only for "otd" method.
-    reg : float
-        Regularization term to be used with "sinkhorn" method
 
     """
 
-    def __init__(
-        self, G: nx.Graph, weight_key="weight", method="otd", numThreads=1, reg=0.1
-    ):
+    def __init__(self, G: nx.Graph, weight_key="weight"):
         super().__init__(G, weight_key)
-        if method == "otd":
-            self.method = method
-            self.numThreads = numThreads
-        elif method == "sinkhorn":
-            self.method = method
-            self.reg = reg
-        else:
-            raise NotImplementedError(
-                "Specified method not avaialbale. Available options: otd, sinkhorn."
-            )
 
-    def calculate_ricci_curvature(self, alpha=0.5, norm=True):
+    def calculate_ricci_curvature(
+        self,
+        alpha=0.5,
+        norm=True,
+        dist_type="uniform",
+        method="otd",
+        numThreads=1,
+        reg=0.1,
+    ):
         """
         Calculate nonzero values of Ricci curvature tensor for all edges in
         graph self.G
@@ -52,10 +43,18 @@ class OllivierRicciCurvature(RicciCurvature):
         Parameters
         ----------
         alpha : float
-            hyperparameter (0 <= alpha <=1) determining how much mass to move
-            from node
+            Hyperparameter (0 <= alpha <=1) determining how much mass to move
+            from node.
         norm : bool
-            if True, normalize nodal scalar curvature
+            If True, normalize nodal scalar curvature.
+        dist_type : str
+            Distribution type for mass distribution in source or target node neighborhood. Default: uniform. Options: uniform, linear, inverse-linear, gaussian.
+        method : str
+            Method for calculating optimal transport plan. Options: otd (optimal transport distance), sinkhorn.
+        numThreads : int
+            Specify number of threads for optimal transport plan. Only for "otd" method.
+        reg : float
+            Regularization term to be used with "sinkhorn" method.
 
         Returns
         -------
@@ -67,8 +66,21 @@ class OllivierRicciCurvature(RicciCurvature):
         if alpha >= 1 or alpha <= 0:
             raise ValueError("alpha must be set between 0 and 1")
 
+        if method != "otd" and method != "sinkhorn":
+            raise NotImplementedError(
+                "Specified optimal transport method not available. Options: otd, sinkhorn."
+            )
+
         ricci_tensor = {
-            edge: self.calculate_edge_curvature(edge[0], edge[1], alpha)
+            edge: self.calculate_edge_curvature(
+                edge[0],
+                edge[1],
+                alpha=alpha,
+                dist_type=dist_type,
+                method=method,
+                numThreads=numThreads,
+                reg=reg,
+            )
             for edge in self.G.edges()
         }
         nx.set_edge_attributes(self.G, ricci_tensor, "ricci_curvature")
@@ -82,7 +94,16 @@ class OllivierRicciCurvature(RicciCurvature):
             self.G.graph["norm_graph_ricci_curvature"],
         ) = self._calculate_graph_curvature()
 
-    def calculate_edge_curvature(self, source_node, target_node, alpha=0.5):
+    def calculate_edge_curvature(
+        self,
+        source_node,
+        target_node,
+        alpha=0.5,
+        dist_type="uniform",
+        method="otd",
+        numThreads=1,
+        reg=0.1,
+    ):
         """
         Calculate value of Ricci Curvature tensor associated with an edge
         between a source and target node defined as
@@ -98,6 +119,14 @@ class OllivierRicciCurvature(RicciCurvature):
         alpha : float
             hyperparameter (0 <= alpha <=1) determining how much mass to move
             from node
+        dist_type : str
+            Distribution type for mass distribution in source or target node neighborhood. Default: uniform. Options: uniform, linear, inverse-linear, gaussian.
+        method : str
+            Method for calculating optimal transport plan. Options: otd (optimal transport distance), sinkhorn
+        numThreads : int
+            Specify number of threads for optimal transport plan. Only for "otd" method.
+        reg : float
+            Regularization term to be used with "sinkhorn" method
 
         Returns
         -------
@@ -106,27 +135,27 @@ class OllivierRicciCurvature(RicciCurvature):
 
         """
         source_neighbors, source_dist = self._neighborhood_mass_distribution(
-            source_node, alpha
+            source_node, alpha, dist_type
         )
         target_neighbors, target_dist = self._neighborhood_mass_distribution(
-            target_node, alpha
+            target_node, alpha, dist_type
         )
         short_path_matrix = self._get_shortest_path_matrix(
             source_neighbors, target_neighbors
         )
-        if self.method == "otd":
+        if method == "otd":
             opt_transport = ot.emd2(
-                source_dist, target_dist, short_path_matrix, numThreads=self.numThreads
+                source_dist, target_dist, short_path_matrix, numThreads=numThreads
             )
-        elif self.method == "sinkhorn":
+        elif method == "sinkhorn":
             opt_transport = ot.sinkhorn2(
-                source_dist, target_dist, short_path_matrix, reg=self.reg
+                source_dist, target_dist, short_path_matrix, reg=reg
             )
         edge_weight = self.G.edges[source_node, target_node][self.weight_key]
         curvature = 1 - (opt_transport / edge_weight)
         return curvature
 
-    def _neighborhood_mass_distribution(self, node, alpha=0.5):
+    def _neighborhood_mass_distribution(self, node, alpha, dist_type):
         """
         Alpha is a hyperparameter such that 1 - alpha mass is distributed from
         a node to its nearest neighbors according to edge weights. Default is
@@ -139,7 +168,9 @@ class OllivierRicciCurvature(RicciCurvature):
             index of node of graph self.G
         alpha : float
             hyperparameter (0 <= alpha <=1) determining how much mass to move
-            from node
+            from source node
+        dist_type : str
+            Distribution type for mass distribution in source or target node neighborhood. Options: uniform, linear, inverse-linear, gaussian.
 
         Returns
         -------
@@ -156,17 +187,52 @@ class OllivierRicciCurvature(RicciCurvature):
         elif num_neighbors == 1:
             distribution = [1 - alpha]
         else:
-            weight_sum = self._calculate_weight_sum(node, neighbors)
-            distribution = [
-                (
+            if dist_type == "uniform":
+                distribution = [(1 - alpha) / (num_neighbors) for neighbor in neighbors]
+            elif dist_type == "linear":
+                weight_sum = self._calculate_weight_sum(node, neighbors)
+                distribution = [
+                    (1 - alpha) * (self.G[node][neighbor][self.weight_key] / weight_sum)
+                    for neighbor in neighbors
+                ]
+            elif dist_type == "inverse-linear":
+                weight_sum = self._calculate_weight_sum(node, neighbors)
+                distribution = [
+                    (
+                        (1 - alpha)
+                        * (
+                            (1 - (self.G[node][neighbor][self.weight_key] / weight_sum))
+                            / (num_neighbors - 1)
+                        )
+                    )
+                    for neighbor in neighbors
+                ]
+            elif dist_type == "gaussian":
+                weight_sum = self._calculate_gauss_weight_sum(node, neighbors)
+                distribution = [
                     (1 - alpha)
                     * (
-                        (1 - (self.G[node][neighbor][self.weight_key] / weight_sum))
-                        / (num_neighbors - 1)
+                        math.e ** (-self.G[node][neighbor][self.weight_key] ** 2)
+                        / weight_sum
                     )
+                    for neighbor in neighbors
+                ]
+            else:
+                raise NotImplementedError(
+                    "Specified dist_type is not available. Options: uniform, linear, inverse-linear, gaussian."
                 )
-                for neighbor in neighbors
-            ]
         return neighbors + [node], np.array(
             distribution + [alpha]
         )  # return neighbors as list for nx.shortest_path_length
+
+    def _calculate_gauss_weight_sum(self, node, neighbors):
+        """
+        Need to normalize differently if using a gaussian mass distribution
+
+        """
+        return sum(
+            [
+                math.e ** (-self.G[node][neighbor][self.weight_key] ** 2)
+                for neighbor in neighbors
+            ]
+        )

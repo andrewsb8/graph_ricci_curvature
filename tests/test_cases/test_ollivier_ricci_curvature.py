@@ -4,13 +4,51 @@ from graph_ricci_curvature._graph_metric import GraphMetric
 from graph_ricci_curvature.ollivier_ricci_curvature import OllivierRicciCurvature
 
 
-def test_mass_distribution(simple_graph):
+def test_uniform_mass_distribution(simple_graph):
     """
     Test that mass distribution among neighborhoods works with unweighted edges
 
     """
     obj = OllivierRicciCurvature(simple_graph)
-    nodes, distributions = obj._neighborhood_mass_distribution(1)
+    nodes, distributions = obj._neighborhood_mass_distribution(
+        1, alpha=0.5, dist_type="uniform"
+    )
+    assert np.allclose(distributions, np.array([0.25, 0.25, 0.5]))
+
+
+def test_linear_mass_distribution(simple_graph):
+    """
+    Test that mass distribution among neighborhoods works with unweighted edges
+
+    """
+    obj = OllivierRicciCurvature(simple_graph)
+    nodes, distributions = obj._neighborhood_mass_distribution(
+        1, alpha=0.5, dist_type="linear"
+    )
+    assert np.allclose(distributions, np.array([0.25, 0.25, 0.5]))
+
+
+def test_inverselinear_mass_distribution(simple_graph):
+    """
+    Test that mass distribution among neighborhoods works with unweighted edges
+
+    """
+    obj = OllivierRicciCurvature(simple_graph)
+    nodes, distributions = obj._neighborhood_mass_distribution(
+        1, alpha=0.5, dist_type="inverse-linear"
+    )
+    assert np.allclose(distributions, np.array([0.25, 0.25, 0.5]))
+
+
+def test_gaussian_mass_distribution(simple_graph):
+    """
+    Test that mass distribution among neighborhoods works with unweighted edges
+
+    """
+    obj = OllivierRicciCurvature(simple_graph)
+    nodes, distributions = obj._neighborhood_mass_distribution(
+        1, alpha=0.5, dist_type="gaussian"
+    )
     assert np.allclose(distributions, np.array([0.25, 0.25, 0.5]))
 
 
@@ -29,8 +67,10 @@ def test_calculate_edge_curvature_sinkhorn(simple_graph):
     sinkhorn divergence
 
     """
-    obj = OllivierRicciCurvature(simple_graph, method="sinkhorn")
-    assert obj.calculate_edge_curvature(1, 2) == pytest.approx(0.5, 0.001)
+    obj = OllivierRicciCurvature(simple_graph)
+    assert obj.calculate_edge_curvature(1, 2, method="sinkhorn") == pytest.approx(
+        0.5, 0.001
+    )
 
 
 def test_tensor_symmetry(simple_graph):
@@ -87,23 +127,62 @@ def test_unnormed_node_curvature(simple_graph):
     ]
 
 
-def test_weighted_mass_distribution(simple_weighted_graph):
+def test_linear_weighted_mass_distribution(simple_weighted_graph):
     """
     Test that mass distribution among neighborhoods works with weighted edges
 
     """
     obj = OllivierRicciCurvature(simple_weighted_graph)
-    nodes, distributions = obj._neighborhood_mass_distribution(1)
+    nodes, distributions = obj._neighborhood_mass_distribution(
+        1, alpha=0.5, dist_type="linear"
+    )
+    assert np.allclose(distributions, np.array([0.1, 0.4, 0.5]))
+
+
+def test_inverselinear_weighted_mass_distribution(simple_weighted_graph):
+    """
+    Test that mass distribution among neighborhoods works with weighted edges
+
+    """
+    obj = OllivierRicciCurvature(simple_weighted_graph)
+    nodes, distributions = obj._neighborhood_mass_distribution(
+        1, alpha=0.5, dist_type="inverse-linear"
+    )
     assert np.allclose(distributions, np.array([0.4, 0.1, 0.5]))
 
 
-def test_weighted_ricci_curvature(simple_weighted_graph):
+def test_gaussian_weighted_mass_distribution(simple_weighted_graph):
+    """
+    Test that mass distribution among neighborhoods works with weighted edges
+
+    """
+    obj = OllivierRicciCurvature(simple_weighted_graph)
+    nodes, distributions = obj._neighborhood_mass_distribution(
+        1, alpha=0.5, dist_type="gaussian"
+    )
+    assert np.allclose(distributions, np.array([0.48851132, 0.01148868, 0.5]))
+
+
+def test_uniform_weighted_ricci_curvature(simple_weighted_graph):
     """
     Test calculation of ricci curvature tensor for weighted graph
 
     """
     obj = OllivierRicciCurvature(simple_weighted_graph)
-    obj.calculate_ricci_curvature()
+    obj.calculate_ricci_curvature(dist_type="inverse-linear")
+    assert list(obj.G.edges.data()) == [
+        (1, 2, {"weight": 0.5, "ricci_curvature": pytest.approx(0.5)}),
+        (1, 3, {"weight": 2, "ricci_curvature": pytest.approx(0.5)}),
+    ]
+
+
+def test_inverselinear_weighted_ricci_curvature(simple_weighted_graph):
+    """
+    Test calculation of ricci curvature tensor for weighted graph
+
+    """
+    obj = OllivierRicciCurvature(simple_weighted_graph)
+    obj.calculate_ricci_curvature(dist_type="inverse-linear")
     assert list(obj.G.edges.data()) == [
         (1, 2, {"weight": 0.5, "ricci_curvature": pytest.approx(0.5)}),
         (1, 3, {"weight": 2, "ricci_curvature": pytest.approx(0.5)}),
