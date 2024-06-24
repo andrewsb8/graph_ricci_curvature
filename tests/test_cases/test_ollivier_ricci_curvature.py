@@ -1,6 +1,6 @@
 import pytest
 import numpy as np
-from graph_ricci_curvature.graph_metric import GraphMetric
+from graph_ricci_curvature._graph_metric import GraphMetric
 from graph_ricci_curvature.ollivier_ricci_curvature import OllivierRicciCurvature
 
 

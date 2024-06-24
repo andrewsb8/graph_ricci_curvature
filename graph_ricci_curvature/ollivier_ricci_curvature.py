@@ -7,7 +7,7 @@ References:
 import networkx as nx
 import numpy as np
 import ot
-from graph_ricci_curvature.ricci_curvature import RicciCurvature
+from graph_ricci_curvature._ricci_curvature import RicciCurvature
 
 
 class OllivierRicciCurvature(RicciCurvature):
