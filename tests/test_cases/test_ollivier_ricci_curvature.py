@@ -14,6 +14,16 @@ def test_uniform_mass_distribution(simple_graph):
     assert np.allclose(distributions, np.array([0.25, 0.25, 0.5]))
 
 
+def test_linear_mass_distribution(simple_graph):
+    """
+    Test that mass distribution among neighborhoods works with unweighted edges
+
+    """
+    obj = OllivierRicciCurvature(simple_graph)
+    nodes, distributions = obj._neighborhood_mass_distribution(1, alpha=0.5, dist_type="linear")
+    assert np.allclose(distributions, np.array([0.25, 0.25, 0.5]))
+
+
 def test_inverselinear_mass_distribution(simple_graph):
     """
     Test that mass distribution among neighborhoods works with unweighted edges
@@ -97,7 +107,17 @@ def test_unnormed_node_curvature(simple_graph):
     ]
 
 
-def test_weighted_mass_distribution(simple_weighted_graph):
+def test_linear_weighted_mass_distribution(simple_weighted_graph):
+    """
+    Test that mass distribution among neighborhoods works with weighted edges
+
+    """
+    obj = OllivierRicciCurvature(simple_weighted_graph)
+    nodes, distributions = obj._neighborhood_mass_distribution(1, alpha=0.5, dist_type="linear")
+    assert np.allclose(distributions, np.array([0.1, 0.4, 0.5]))
+
+
+def test_inverselinear_weighted_mass_distribution(simple_weighted_graph):
     """
     Test that mass distribution among neighborhoods works with weighted edges
 

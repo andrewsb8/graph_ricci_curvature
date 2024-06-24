@@ -39,7 +39,7 @@ class OllivierRicciCurvature(RicciCurvature):
         norm : bool
             If True, normalize nodal scalar curvature.
         dist_type : str
-            Distribution type for mass distribution in source or target node neighborhood. Default: uniform. Options: uniform, inverse-linear.
+            Distribution type for mass distribution in source or target node neighborhood. Default: uniform. Options: uniform, linear, inverse-linear.
         method : str
             Method for calculating optimal transport plan. Options: otd (optimal transport distance), sinkhorn.
         numThreads : int
@@ -94,7 +94,7 @@ class OllivierRicciCurvature(RicciCurvature):
             hyperparameter (0 <= alpha <=1) determining how much mass to move
             from node
         dist_type : str
-            Distribution type for mass distribution in source or target node neighborhood. Default: uniform. Options: uniform, inverse-linear.
+            Distribution type for mass distribution in source or target node neighborhood. Default: uniform. Options: uniform, linear, inverse-linear.
         method : str
             Method for calculating optimal transport plan. Options: otd (optimal transport distance), sinkhorn
         numThreads : int
@@ -144,7 +144,7 @@ class OllivierRicciCurvature(RicciCurvature):
             hyperparameter (0 <= alpha <=1) determining how much mass to move
             from node
         dist_type : str
-            Distribution type for mass distribution in source or target node neighborhood. Options: uniform, inverse-linear.
+            Distribution type for mass distribution in source or target node neighborhood. Options: uniform, linear, inverse-linear.
 
         Returns
         -------
@@ -162,7 +162,10 @@ class OllivierRicciCurvature(RicciCurvature):
             distribution = [1 - alpha]
         else:
             if dist_type == "uniform":
-                distribution = [(1 - alpha)/(num_neighbors) for i in range(num_neighbors)]
+                distribution = [(1 - alpha)/(num_neighbors) for neighbor in neighbors]
+            elif dist_type == "linear":
+                weight_sum = self._calculate_weight_sum(node, neighbors)
+                distribution = [(1-alpha)*(self.G[node][neighbor][self.weight_key] / weight_sum) for neighbor in neighbors]
             elif dist_type == "inverse-linear":
                 weight_sum = self._calculate_weight_sum(node, neighbors)
                 distribution = [
@@ -176,7 +179,7 @@ class OllivierRicciCurvature(RicciCurvature):
                     for neighbor in neighbors
                 ]
             else:
-                raise NotImplementedError("Specified dist_type is not available. Options: uniform, inverse-linear.")
+                raise NotImplementedError("Specified dist_type is not available. Options: uniform, linear, inverse-linear.")
         return neighbors + [node], np.array(
             distribution + [alpha]
         )  # return neighbors as list for nx.shortest_path_length
