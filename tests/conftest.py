@@ -21,11 +21,13 @@ def simple_weighted_graph():
     G.edges[1, 3]["weight"] = 2
     return G
 
+
 @pytest.fixture
 def complete_graph():
     """Mock optimizer"""
     G = nx.complete_graph(5)
     return G
+
 
 @pytest.fixture
 def grid_graph():

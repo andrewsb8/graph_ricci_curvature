@@ -2,6 +2,7 @@ import pytest
 import numpy as np
 from graph_ricci_curvature.forman_ricci_curvature import FormanRicciCurvature
 
+
 def test_tensor_symmetry(simple_graph):
     """
     Test the Forman Ricci Curvature of an edge is the same if source and target nodes
@@ -23,6 +24,7 @@ def test_ricci_tensor(simple_graph):
         (1, 2, {"weight": 1.0, "ricci_curvature": 1.0}),
         (1, 3, {"weight": 1.0, "ricci_curvature": 1.0}),
     ]
+
 
 def test_grid_graph(grid_graph):
     """

@@ -187,6 +187,7 @@ def test_inverselinear_weighted_ricci_curvature(simple_weighted_graph):
         (1, 3, {"weight": 2, "ricci_curvature": pytest.approx(0.5)}),
     ]
 
+
 def test_grid_graph(grid_graph):
     """
     Test the result of a calculation of graph curvature of a grid graph is zero
