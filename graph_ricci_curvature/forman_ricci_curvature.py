@@ -68,8 +68,8 @@ class FormanRicciCurvature(RicciCurvature):
         source_neighbors = self._get_neighbors(source_node)
         target_neighbors = self._get_neighbors(target_node)
         edge_weight = self.G[source_node][target_node][self.edge_weight_key]
-        source_node_w = self.G[source_node][self.node_weight_key]
-        target_node_w = self.G[target_node][self.node_weight_key]
+        source_node_w = self.G.nodes[source_node][self.node_weight_key]
+        target_node_w = self.G.nodes[target_node][self.node_weight_key]
         curvature = edge_weight * (
             (source_node_w / edge_weight)
             + (target_node_w / edge_weight)
