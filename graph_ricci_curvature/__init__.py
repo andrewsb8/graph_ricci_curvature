@@ -1,1 +1,2 @@
-__all__ = ["ollivier_ricci_curvature"]
+__author__ = "Brian Andrews"
+__version__ = "0.1.0"
