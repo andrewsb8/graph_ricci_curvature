@@ -15,8 +15,8 @@ class RicciCurvature(GraphMetric):
 
     """
 
-    def __init__(self, G: nx.Graph, weight_key="weight"):
-        super().__init__(G, weight_key)
+    def __init__(self, G: nx.Graph, edge_weight_key="weight", node_weight_key="weight"):
+        super().__init__(G, edge_weight_key, node_weight_key)
 
     def _calculate_graph_curvature(self):
         """
@@ -56,7 +56,7 @@ class RicciCurvature(GraphMetric):
             return sum(
                 [
                     self.G[node][neighbor]["ricci_curvature"]
-                    * (self.G[node][neighbor][self.weight_key] / weight_sum)
+                    * (self.G[node][neighbor][self.edge_weight_key] / weight_sum)
                     for neighbor in neighbors
                 ]
             )

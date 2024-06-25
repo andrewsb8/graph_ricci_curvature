@@ -8,12 +8,15 @@ import networkx as nx
 import numpy as np
 import ot
 import math
+import warnings
 from graph_ricci_curvature._ricci_curvature import RicciCurvature
 
 
 class OllivierRicciCurvature(RicciCurvature):
     """
-    Class for calculating Ollivier Ricci Curvature
+    Class for calculating Ollivier Ricci Curvature of a connected graph. Only
+    edge weights are considered in Ollivier curvature and are set to 1.0 if values
+    are not provided in user or found in the input networkx graph object.
 
     Parameters
     ----------
@@ -24,8 +27,8 @@ class OllivierRicciCurvature(RicciCurvature):
 
     """
 
-    def __init__(self, G: nx.Graph, weight_key="weight"):
-        super().__init__(G, weight_key)
+    def __init__(self, G: nx.Graph, edge_weight_key="weight", node_weight_key="weight"):
+        super().__init__(G, edge_weight_key, node_weight_key)
 
     def calculate_ricci_curvature(
         self,
@@ -38,7 +41,7 @@ class OllivierRicciCurvature(RicciCurvature):
     ):
         """
         Calculate nonzero values of Ricci curvature tensor for all edges in
-        graph self.G
+        graph self.G and tensor contractions.
 
         Parameters
         ----------
@@ -151,7 +154,7 @@ class OllivierRicciCurvature(RicciCurvature):
             opt_transport = ot.sinkhorn2(
                 source_dist, target_dist, short_path_matrix, reg=reg
             )
-        edge_weight = self.G.edges[source_node, target_node][self.weight_key]
+        edge_weight = self.G.edges[source_node, target_node][self.edge_weight_key]
         curvature = 1 - (opt_transport / edge_weight)
         return curvature
 
@@ -192,7 +195,8 @@ class OllivierRicciCurvature(RicciCurvature):
             elif dist_type == "linear":
                 weight_sum = self._calculate_weight_sum(node, neighbors)
                 distribution = [
-                    (1 - alpha) * (self.G[node][neighbor][self.weight_key] / weight_sum)
+                    (1 - alpha)
+                    * (self.G[node][neighbor][self.edge_weight_key] / weight_sum)
                     for neighbor in neighbors
                 ]
             elif dist_type == "inverse-linear":
@@ -201,7 +205,13 @@ class OllivierRicciCurvature(RicciCurvature):
                     (
                         (1 - alpha)
                         * (
-                            (1 - (self.G[node][neighbor][self.weight_key] / weight_sum))
+                            (
+                                1
+                                - (
+                                    self.G[node][neighbor][self.edge_weight_key]
+                                    / weight_sum
+                                )
+                            )
                             / (num_neighbors - 1)
                         )
                     )
@@ -212,7 +222,7 @@ class OllivierRicciCurvature(RicciCurvature):
                 distribution = [
                     (1 - alpha)
                     * (
-                        math.e ** (-self.G[node][neighbor][self.weight_key] ** 2)
+                        math.e ** (-self.G[node][neighbor][self.edge_weight_key] ** 2)
                         / weight_sum
                     )
                     for neighbor in neighbors
@@ -232,7 +242,7 @@ class OllivierRicciCurvature(RicciCurvature):
         """
         return sum(
             [
-                math.e ** (-self.G[node][neighbor][self.weight_key] ** 2)
+                math.e ** (-self.G[node][neighbor][self.edge_weight_key] ** 2)
                 for neighbor in neighbors
             ]
         )

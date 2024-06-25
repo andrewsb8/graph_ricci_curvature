@@ -16,9 +16,10 @@ classifiers = [
     "Operating System :: OS Independent",
 ]
 dependencies = [
-    'networkx',
-    'POT',
-    'numpy',
+    'networkx==3.3',
+    'POT==0.9.3',
+    'numpy==1.23',
+    'scipy==1.12'
 ]
 
 [project.urls]
