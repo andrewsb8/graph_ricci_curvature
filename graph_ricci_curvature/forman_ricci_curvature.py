@@ -1,7 +1,7 @@
 """
 References:
-    - https://arxiv.org/pdf/1603.00386
-    - https://www.nature.com/articles/s41598-018-27001-3
+    - [1] https://arxiv.org/pdf/1603.00386
+    - [2] https://www.nature.com/articles/s41598-018-27001-3
 """
 
 import networkx as nx
@@ -65,41 +65,44 @@ class FormanRicciCurvature(RicciCurvature):
         ) = self._calculate_graph_curvature()
 
     def calculate_edge_curvature(self, source_node, target_node):
+        # define some variables to make equation more readable
         source_neighbors = self._get_neighbors(source_node)
         target_neighbors = self._get_neighbors(target_node)
         edge_weight = self.G[source_node][target_node][self.edge_weight_key]
         source_node_w = self.G.nodes[source_node][self.node_weight_key]
         target_node_w = self.G.nodes[target_node][self.node_weight_key]
+
+        # equation for curvature (see Ref [2])
         curvature = edge_weight * (
             (source_node_w / edge_weight)
             + (target_node_w / edge_weight)
-            - sum(
-                [
-                    sum(
-                        [
-                            (
-                                source_node_w
-                                / math.sqrt(
-                                    edge_weight
-                                    * self.G[source_node][sn_neigh][
-                                        self.edge_weight_key
-                                    ]
-                                )
+            - (
+                sum(
+                    [
+                        (
+                            source_node_w
+                            / math.sqrt(
+                                edge_weight
+                                * self.G[source_node][sn_neigh][self.edge_weight_key]
                             )
-                            + (
-                                target_node_w
-                                / math.sqrt(
-                                    edge_weight
-                                    * self.G[target_node][tn_neigh][
-                                        self.edge_weight_key
-                                    ]
-                                )
+                        )
+                        for sn_neigh in source_neighbors
+                        if sn_neigh != target_node
+                    ]
+                )
+                + sum(
+                    [
+                        (
+                            target_node_w
+                            / math.sqrt(
+                                edge_weight
+                                * self.G[target_node][tn_neigh][self.edge_weight_key]
                             )
-                            for sn_neigh in source_neighbors
-                        ]
-                    )
-                    for tn_neigh in target_neighbors
-                ]
+                        )
+                        for tn_neigh in target_neighbors
+                        if tn_neigh != source_node
+                    ]
+                )
             )
         )
         return curvature
