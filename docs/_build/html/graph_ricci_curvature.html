@@ -48,16 +48,12 @@
 <li class="toctree-l1 current"><a class="reference internal" href="modules.html">graph_ricci_curvature</a><ul class="current">
 <li class="toctree-l2 current"><a class="current reference internal" href="#">graph_ricci_curvature package</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#submodules">Submodules</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#module-graph_ricci_curvature.graph_metric">graph_ricci_curvature.graph_metric module</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#graph_ricci_curvature.graph_metric.GraphMetric"><code class="docutils literal notranslate"><span class="pre">GraphMetric</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-graph_ricci_curvature.forman_ricci_curvature">graph_ricci_curvature.forman_ricci_curvature module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#graph_ricci_curvature.forman_ricci_curvature.FormanRicciCurvature"><code class="docutils literal notranslate"><span class="pre">FormanRicciCurvature</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#module-graph_ricci_curvature.ollivier_ricci_curvature">graph_ricci_curvature.ollivier_ricci_curvature module</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#graph_ricci_curvature.ollivier_ricci_curvature.OllivierRicciCurvature"><code class="docutils literal notranslate"><span class="pre">OllivierRicciCurvature</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="#module-graph_ricci_curvature.ricci_curvature">graph_ricci_curvature.ricci_curvature module</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#graph_ricci_curvature.ricci_curvature.RicciCurvature"><code class="docutils literal notranslate"><span class="pre">RicciCurvature</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#module-graph_ricci_curvature">Module contents</a></li>
@@ -97,21 +93,68 @@
 <section id="submodules">
 <h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
 </section>
-<section id="module-graph_ricci_curvature.graph_metric">
-<span id="graph-ricci-curvature-graph-metric-module"></span><h2>graph_ricci_curvature.graph_metric module<a class="headerlink" href="#module-graph_ricci_curvature.graph_metric" title="Link to this heading"></a></h2>
+<section id="module-graph_ricci_curvature.forman_ricci_curvature">
+<span id="graph-ricci-curvature-forman-ricci-curvature-module"></span><h2>graph_ricci_curvature.forman_ricci_curvature module<a class="headerlink" href="#module-graph_ricci_curvature.forman_ricci_curvature" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt>References:</dt><dd><ul class="simple">
+<li><p>[1] R P Sreejith et al J. Stat. Mech. (2016) 063206. DOI: 10.1088/1742-5468/2016/06/063206. arXiv: <a class="reference external" href="https://arxiv.org/pdf/1603.00386">https://arxiv.org/pdf/1603.00386</a>.</p></li>
+</ul>
+</dd>
+</dl>
 <dl class="py class">
-<dt class="sig sig-object py" id="graph_ricci_curvature.graph_metric.GraphMetric">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">graph_ricci_curvature.graph_metric.</span></span><span class="sig-name descname"><span class="pre">GraphMetric</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">G</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Graph</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weight_key</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/graph_ricci_curvature/graph_metric.html#GraphMetric"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#graph_ricci_curvature.graph_metric.GraphMetric" title="Link to this definition"></a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ABC</span></code></p>
-<p>Parent class for classes calculating properties of a graph</p>
+<dt class="sig sig-object py" id="graph_ricci_curvature.forman_ricci_curvature.FormanRicciCurvature">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">graph_ricci_curvature.forman_ricci_curvature.</span></span><span class="sig-name descname"><span class="pre">FormanRicciCurvature</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">G</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Graph</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">edge_weight_key</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'weight'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">node_weight_key</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'weight'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/graph_ricci_curvature/forman_ricci_curvature.html#FormanRicciCurvature"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#graph_ricci_curvature.forman_ricci_curvature.FormanRicciCurvature" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">_RicciCurvature</span></code></p>
+<p>Class for calculating Forman Ricci Curvature for a connected graph. Edge and
+node weights are set to 1.0 unless values are specified by the user in the input
+networkx graph object.</p>
 <section id="parameters">
 <h3>Parameters<a class="headerlink" href="#parameters" title="Link to this heading"></a></h3>
 <dl class="simple">
 <dt>G<span class="classifier">networkx graph</span></dt><dd><p>Input graph</p>
 </dd>
-<dt>weight_key<span class="classifier">str</span></dt><dd><p>key to specify edge weights in networkx dictionary</p>
+<dt>edge_weight_key<span class="classifier">str</span></dt><dd><p>Key to specify edge weights in networkx graph. Default = weight.</p>
+</dd>
+<dt>node_weight_key<span class="classifier">str</span></dt><dd><p>Key to specify node weights in networkx graph. Default = weight.</p>
 </dd>
 </dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="graph_ricci_curvature.forman_ricci_curvature.FormanRicciCurvature.calculate_edge_curvature">
+<span class="sig-name descname"><span class="pre">calculate_edge_curvature</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">source_node</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target_node</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/graph_ricci_curvature/forman_ricci_curvature.html#FormanRicciCurvature.calculate_edge_curvature"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#graph_ricci_curvature.forman_ricci_curvature.FormanRicciCurvature.calculate_edge_curvature" title="Link to this definition"></a></dt>
+<dd><p>Calculate value of Forman Ricci Curvature tensor associated with an edge
+between a source and target node defined as in References.</p>
+<section id="id1">
+<h4>Parameters<a class="headerlink" href="#id1" title="Link to this heading"></a></h4>
+<dl class="simple">
+<dt>source_node<span class="classifier">int or tuple</span></dt><dd><p>index of source_node in graph self.G</p>
+</dd>
+<dt>target_node<span class="classifier">int or tuple</span></dt><dd><p>index of target node in graph self.G</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="graph_ricci_curvature.forman_ricci_curvature.FormanRicciCurvature.calculate_ricci_curvature">
+<span class="sig-name descname"><span class="pre">calculate_ricci_curvature</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">norm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/graph_ricci_curvature/forman_ricci_curvature.html#FormanRicciCurvature.calculate_ricci_curvature"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#graph_ricci_curvature.forman_ricci_curvature.FormanRicciCurvature.calculate_ricci_curvature" title="Link to this definition"></a></dt>
+<dd><p>Calculate nonzero values of Ricci curvature tensor for all edges in
+graph self.G</p>
+<section id="id2">
+<h4>Parameters<a class="headerlink" href="#id2" title="Link to this heading"></a></h4>
+<dl class="simple">
+<dt>norm<span class="classifier">bool</span></dt><dd><p>If True, normalize nodal scalar curvature.</p>
+</dd>
+</dl>
+</section>
+<section id="returns">
+<h4>Returns<a class="headerlink" href="#returns" title="Link to this heading"></a></h4>
+<dl class="simple">
+<dt>self.G<span class="classifier">networkx graph</span></dt><dd><p>Returns graph with ricci_curvature as graph, node, and edge attributes</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
 </section>
 </dd></dl>
 
@@ -120,32 +163,36 @@
 <span id="graph-ricci-curvature-ollivier-ricci-curvature-module"></span><h2>graph_ricci_curvature.ollivier_ricci_curvature module<a class="headerlink" href="#module-graph_ricci_curvature.ollivier_ricci_curvature" title="Link to this heading"></a></h2>
 <dl class="simple">
 <dt>References:</dt><dd><ul class="simple">
-<li><p>Ollivier, Y. 2009. “Ricci curvature of Markov chains on metric spaces”. Journal of Functional Analysis, 256(3), 810-864.</p></li>
-<li><p>Sandhu et al. 2015. “Graph Curvature for Differentiating Cancer Networks”. Scientific Reports. DOi: 10.1038/srep12323</p></li>
+<li><p>[1] Ollivier, Y. 2009. “Ricci curvature of Markov chains on metric spaces”. Journal of Functional Analysis, 256(3), 810-864. DOI: <a class="reference external" href="https://doi.org/10.1016/j.jfa.2008.11.001">https://doi.org/10.1016/j.jfa.2008.11.001</a>, arXiv: <a class="reference external" href="https://arxiv.org/abs/math/0701886">https://arxiv.org/abs/math/0701886</a></p></li>
+<li><p>[2] Sandhu et al. 2015. “Graph Curvature for Differentiating Cancer Networks”. Scientific Reports. DOi: 10.1038/srep12323. DOI: <a class="reference external" href="https://doi.org/10.1038/srep12323">https://doi.org/10.1038/srep12323</a>.</p></li>
 </ul>
 </dd>
 </dl>
 <dl class="py class">
 <dt class="sig sig-object py" id="graph_ricci_curvature.ollivier_ricci_curvature.OllivierRicciCurvature">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">graph_ricci_curvature.ollivier_ricci_curvature.</span></span><span class="sig-name descname"><span class="pre">OllivierRicciCurvature</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">G</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Graph</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weight_key</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'weight'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/graph_ricci_curvature/ollivier_ricci_curvature.html#OllivierRicciCurvature"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#graph_ricci_curvature.ollivier_ricci_curvature.OllivierRicciCurvature" title="Link to this definition"></a></dt>
-<dd><p>Bases: <a class="reference internal" href="#graph_ricci_curvature.ricci_curvature.RicciCurvature" title="graph_ricci_curvature.ricci_curvature.RicciCurvature"><code class="xref py py-class docutils literal notranslate"><span class="pre">RicciCurvature</span></code></a></p>
-<p>Class for calculating Ollivier Ricci Curvature</p>
-<section id="id1">
-<h3>Parameters<a class="headerlink" href="#id1" title="Link to this heading"></a></h3>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">graph_ricci_curvature.ollivier_ricci_curvature.</span></span><span class="sig-name descname"><span class="pre">OllivierRicciCurvature</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">G</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Graph</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">edge_weight_key</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'weight'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">node_weight_key</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'weight'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/graph_ricci_curvature/ollivier_ricci_curvature.html#OllivierRicciCurvature"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#graph_ricci_curvature.ollivier_ricci_curvature.OllivierRicciCurvature" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">_RicciCurvature</span></code></p>
+<p>Class for calculating Ollivier Ricci Curvature of a connected graph. Only
+edge weights are considered in Ollivier curvature and are set to 1.0 if values
+are not provided in user or found in the input networkx graph object.</p>
+<section id="id3">
+<h3>Parameters<a class="headerlink" href="#id3" title="Link to this heading"></a></h3>
 <dl class="simple">
 <dt>G<span class="classifier">networkx graph</span></dt><dd><p>Input graph</p>
 </dd>
-<dt>weight_key<span class="classifier">str</span></dt><dd><p>key to specify edge weights in networkx dictionary.</p>
+<dt>edge_weight_key<span class="classifier">str</span></dt><dd><p>Key to specify edge weights in networkx graph. Default = weight.</p>
+</dd>
+<dt>node_weight_key<span class="classifier">str</span></dt><dd><p>Key to specify node weights in networkx graph. Default = weight.</p>
 </dd>
 </dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="graph_ricci_curvature.ollivier_ricci_curvature.OllivierRicciCurvature.calculate_edge_curvature">
-<span class="sig-name descname"><span class="pre">calculate_edge_curvature</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">source_node</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target_node</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/graph_ricci_curvature/ollivier_ricci_curvature.html#OllivierRicciCurvature.calculate_edge_curvature"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#graph_ricci_curvature.ollivier_ricci_curvature.OllivierRicciCurvature.calculate_edge_curvature" title="Link to this definition"></a></dt>
-<dd><p>Calculate value of Ricci Curvature tensor associated with an edge
+<span class="sig-name descname"><span class="pre">calculate_edge_curvature</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">source_node</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target_node</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dist_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'uniform'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'otd'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">numThreads</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reg</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/graph_ricci_curvature/ollivier_ricci_curvature.html#OllivierRicciCurvature.calculate_edge_curvature"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#graph_ricci_curvature.ollivier_ricci_curvature.OllivierRicciCurvature.calculate_edge_curvature" title="Link to this definition"></a></dt>
+<dd><p>Calculate value of Ollivier Ricci Curvature tensor associated with an edge
 between a source and target node defined as</p>
 <p>1 - ( Wasserstein 1 Distance / Edge Weight )</p>
-<section id="id2">
-<h4>Parameters<a class="headerlink" href="#id2" title="Link to this heading"></a></h4>
+<section id="id4">
+<h4>Parameters<a class="headerlink" href="#id4" title="Link to this heading"></a></h4>
 <dl class="simple">
 <dt>source_node<span class="classifier">int or tuple</span></dt><dd><p>index of source_node in graph self.G</p>
 </dd>
@@ -154,10 +201,18 @@ between a source and target node defined as</p>
 <dt>alpha<span class="classifier">float</span></dt><dd><p>hyperparameter (0 &lt;= alpha &lt;=1) determining how much mass to move
 from node</p>
 </dd>
+<dt>dist_type<span class="classifier">str</span></dt><dd><p>Distribution type for mass distribution in source or target node neighborhood. Default: uniform. Options: uniform, linear, inverse-linear, gaussian.</p>
+</dd>
+<dt>method<span class="classifier">str</span></dt><dd><p>Method for calculating optimal transport plan. Options: otd (optimal transport distance), sinkhorn</p>
+</dd>
+<dt>numThreads<span class="classifier">int</span></dt><dd><p>Specify number of threads for optimal transport plan. Only for “otd” method.</p>
+</dd>
+<dt>reg<span class="classifier">float</span></dt><dd><p>Regularization term to be used with “sinkhorn” method</p>
+</dd>
 </dl>
 </section>
-<section id="returns">
-<h4>Returns<a class="headerlink" href="#returns" title="Link to this heading"></a></h4>
+<section id="id5">
+<h4>Returns<a class="headerlink" href="#id5" title="Link to this heading"></a></h4>
 <dl class="simple">
 <dt>curvature<span class="classifier">float</span></dt><dd><p>value of curvature tensor</p>
 </dd>
@@ -167,47 +222,36 @@ from node</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="graph_ricci_curvature.ollivier_ricci_curvature.OllivierRicciCurvature.calculate_ricci_curvature">
-<span class="sig-name descname"><span class="pre">calculate_ricci_curvature</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">norm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/graph_ricci_curvature/ollivier_ricci_curvature.html#OllivierRicciCurvature.calculate_ricci_curvature"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#graph_ricci_curvature.ollivier_ricci_curvature.OllivierRicciCurvature.calculate_ricci_curvature" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">calculate_ricci_curvature</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">norm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dist_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'uniform'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'otd'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">numThreads</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reg</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/graph_ricci_curvature/ollivier_ricci_curvature.html#OllivierRicciCurvature.calculate_ricci_curvature"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#graph_ricci_curvature.ollivier_ricci_curvature.OllivierRicciCurvature.calculate_ricci_curvature" title="Link to this definition"></a></dt>
 <dd><p>Calculate nonzero values of Ricci curvature tensor for all edges in
-graph self.G</p>
-<section id="id3">
-<h4>Parameters<a class="headerlink" href="#id3" title="Link to this heading"></a></h4>
+graph self.G and tensor contractions.</p>
+<section id="id6">
+<h4>Parameters<a class="headerlink" href="#id6" title="Link to this heading"></a></h4>
 <dl class="simple">
-<dt>alpha<span class="classifier">float</span></dt><dd><p>hyperparameter (0 &lt;= alpha &lt;=1) determining how much mass to move
-from node</p>
+<dt>alpha<span class="classifier">float</span></dt><dd><p>Hyperparameter (0 &lt;= alpha &lt;=1) determining how much mass to move
+from node.</p>
 </dd>
-<dt>norm<span class="classifier">bool</span></dt><dd><p>if True, normalize nodal scalar curvature</p>
+<dt>norm<span class="classifier">bool</span></dt><dd><p>If True, normalize nodal scalar curvature.</p>
+</dd>
+<dt>dist_type<span class="classifier">str</span></dt><dd><p>Distribution type for mass distribution in source or target node neighborhood. Default: uniform. Options: uniform, linear, inverse-linear, gaussian.</p>
+</dd>
+<dt>method<span class="classifier">str</span></dt><dd><p>Method for calculating optimal transport plan. Options: otd (optimal transport distance), sinkhorn.</p>
+</dd>
+<dt>numThreads<span class="classifier">int</span></dt><dd><p>Specify number of threads for optimal transport plan. Only for “otd” method.</p>
+</dd>
+<dt>reg<span class="classifier">float</span></dt><dd><p>Regularization term to be used with “sinkhorn” method.</p>
 </dd>
 </dl>
 </section>
-<section id="id4">
-<h4>Returns<a class="headerlink" href="#id4" title="Link to this heading"></a></h4>
+<section id="id7">
+<h4>Returns<a class="headerlink" href="#id7" title="Link to this heading"></a></h4>
 <dl class="simple">
-<dt>self.G<span class="classifier">networkx graph</span></dt><dd><p>Returns graph with ricci_curvature as node and edge attributes</p>
+<dt>self.G<span class="classifier">networkx graph</span></dt><dd><p>Returns graph with ricci_curvature as graph, node, and edge attributes</p>
 </dd>
 </dl>
 </section>
 </dd></dl>
 
-</section>
-</dd></dl>
-
-</section>
-<section id="module-graph_ricci_curvature.ricci_curvature">
-<span id="graph-ricci-curvature-ricci-curvature-module"></span><h2>graph_ricci_curvature.ricci_curvature module<a class="headerlink" href="#module-graph_ricci_curvature.ricci_curvature" title="Link to this heading"></a></h2>
-<dl class="py class">
-<dt class="sig sig-object py" id="graph_ricci_curvature.ricci_curvature.RicciCurvature">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">graph_ricci_curvature.ricci_curvature.</span></span><span class="sig-name descname"><span class="pre">RicciCurvature</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">G</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Graph</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weight_key</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/graph_ricci_curvature/ricci_curvature.html#RicciCurvature"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#graph_ricci_curvature.ricci_curvature.RicciCurvature" title="Link to this definition"></a></dt>
-<dd><p>Bases: <a class="reference internal" href="#graph_ricci_curvature.graph_metric.GraphMetric" title="graph_ricci_curvature.graph_metric.GraphMetric"><code class="xref py py-class docutils literal notranslate"><span class="pre">GraphMetric</span></code></a></p>
-<p>Class for storing information about the Ricci Curvature Tensor</p>
-<section id="id5">
-<h3>Parameters<a class="headerlink" href="#id5" title="Link to this heading"></a></h3>
-<dl class="simple">
-<dt>G<span class="classifier">networkx graph</span></dt><dd><p>Input graph</p>
-</dd>
-<dt>weight_key<span class="classifier">str</span></dt><dd><p>key to specify edge weights in networkx dictionary. Default = weight</p>
-</dd>
-</dl>
 </section>
 </dd></dl>
 

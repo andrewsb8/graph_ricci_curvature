@@ -52,3 +52,12 @@ html_theme = "sphinx_rtd_theme"
 ```
 
 Now, ```make html``` will produce the docs again but in a new theme.
+
+Adding README to the documentation. Tutorial: https://www.sphinx-doc.org/en/master/usage/markdown.html, https://github.com/sphinx-doc/sphinx/issues/7000
+
+install myst-parser via pip. Add a file in docs called readme.md with
+
+{include} ../README.md
+:relative-images:  
+
+**surrounded by triple quotes!

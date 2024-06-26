@@ -6,6 +6,9 @@
 Welcome to graph_ricci_curvature's documentation!
 =================================================
 
+.. include:: ../README.md
+   :parser: myst_parser.sphinx_
+
 .. toctree::
    :maxdepth: 2
    :caption: Contents:

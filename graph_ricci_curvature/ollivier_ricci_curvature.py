@@ -1,7 +1,7 @@
 """
 References:
-    - Ollivier, Y. 2009. "Ricci curvature of Markov chains on metric spaces". Journal of Functional Analysis, 256(3), 810-864.
-    - Sandhu et al. 2015. "Graph Curvature for Differentiating Cancer Networks". Scientific Reports. DOi: 10.1038/srep12323
+    - [1] Ollivier, Y. 2009. "Ricci curvature of Markov chains on metric spaces". Journal of Functional Analysis, 256(3), 810-864. DOI: https://doi.org/10.1016/j.jfa.2008.11.001, arXiv: https://arxiv.org/abs/math/0701886
+    - [2] Sandhu et al. 2015. "Graph Curvature for Differentiating Cancer Networks". Scientific Reports. DOi: 10.1038/srep12323. DOI: https://doi.org/10.1038/srep12323.
 """
 
 import networkx as nx
@@ -9,10 +9,10 @@ import numpy as np
 import ot
 import math
 import warnings
-from graph_ricci_curvature._ricci_curvature import RicciCurvature
+from graph_ricci_curvature._ricci_curvature import _RicciCurvature
 
 
-class OllivierRicciCurvature(RicciCurvature):
+class OllivierRicciCurvature(_RicciCurvature):
     """
     Class for calculating Ollivier Ricci Curvature of a connected graph. Only
     edge weights are considered in Ollivier curvature and are set to 1.0 if values
@@ -110,7 +110,7 @@ class OllivierRicciCurvature(RicciCurvature):
         reg=0.1,
     ):
         """
-        Calculate value of Ricci Curvature tensor associated with an edge
+        Calculate value of Ollivier Ricci Curvature tensor associated with an edge
         between a source and target node defined as
 
         1 - ( Wasserstein 1 Distance / Edge Weight )

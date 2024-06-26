@@ -48,3 +48,6 @@ Output:
 ]
 1.5 0.5
 ```
+
+# References
+- [1] https://www.nature.com/articles/s41598-018-27001-3

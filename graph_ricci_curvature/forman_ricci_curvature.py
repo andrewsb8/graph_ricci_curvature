@@ -1,17 +1,16 @@
 """
 References:
-    - [1] https://arxiv.org/pdf/1603.00386
-    - [2] https://www.nature.com/articles/s41598-018-27001-3
+    - [1] R P Sreejith et al J. Stat. Mech. (2016) 063206. DOI: 10.1088/1742-5468/2016/06/063206. arXiv: https://arxiv.org/pdf/1603.00386.
 """
 
 import networkx as nx
 import numpy as np
 import ot
 import math
-from graph_ricci_curvature._ricci_curvature import RicciCurvature
+from graph_ricci_curvature._ricci_curvature import _RicciCurvature
 
 
-class FormanRicciCurvature(RicciCurvature):
+class FormanRicciCurvature(_RicciCurvature):
     """
     Class for calculating Forman Ricci Curvature for a connected graph. Edge and
     node weights are set to 1.0 unless values are specified by the user in the input
@@ -22,8 +21,9 @@ class FormanRicciCurvature(RicciCurvature):
     G : networkx graph
         Input graph
     edge_weight_key : str
-        Key to specify edge weights in networkx dictionary. Default = weight
-
+        Key to specify edge weights in networkx graph. Default = weight.
+    node_weight_key : str
+        Key to specify node weights in networkx graph. Default = weight.
     """
 
     def __init__(self, G: nx.Graph, edge_weight_key="weight", node_weight_key="weight"):
@@ -65,6 +65,18 @@ class FormanRicciCurvature(RicciCurvature):
         ) = self._calculate_graph_curvature()
 
     def calculate_edge_curvature(self, source_node, target_node):
+        """
+        Calculate value of Forman Ricci Curvature tensor associated with an edge
+        between a source and target node defined as in References.
+
+        Parameters
+        ----------
+        source_node : int or tuple
+            index of source_node in graph self.G
+        target_node : int or tuple
+            index of target node in graph self.G
+
+        """
         # define some variables to make equation more readable
         source_neighbors = self._get_neighbors(source_node)
         target_neighbors = self._get_neighbors(target_node)

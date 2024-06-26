@@ -1,8 +1,8 @@
 import networkx as nx
-from graph_ricci_curvature._graph_metric import GraphMetric
+from graph_ricci_curvature._graph_metric import _GraphMetric
 
 
-class RicciCurvature(GraphMetric):
+class _RicciCurvature(_GraphMetric):
     """
     Class for storing information about the Ricci Curvature Tensor
 

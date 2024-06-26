@@ -4,7 +4,7 @@ import numpy as np
 import sys
 
 
-class GraphMetric(ABC):
+class _GraphMetric(ABC):
     """
     Parent class for classes calculating properties of a graph
 
