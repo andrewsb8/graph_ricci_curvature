@@ -17,9 +17,10 @@ class GraphMetric(ABC):
 
     """
 
-    def __init__(self, G: nx.Graph, weight_key):
+    def __init__(self, G: nx.Graph, edge_weight_key, node_weight_key):
         self.G = G.copy()
-        self.weight_key = weight_key
+        self.edge_weight_key = edge_weight_key
+        self.node_weight_key = node_weight_key
         self._validate()
 
     def _validate(self):
@@ -36,25 +37,36 @@ class GraphMetric(ABC):
         if len(self.G.edges()) == 0:
             raise ValueError("Graph has no edges!")
 
-        if not nx.get_edge_attributes(self.G, self.weight_key):
+        if not nx.get_edge_attributes(self.G, self.edge_weight_key):
             sys.stderr.write(
-                "No edge weights detected, setting edge weights to one with weight_key = weight\n"
+                "No edge weights detected, setting edge weights to one with edge_weight_key = weight\n"
             )
-            self._set_edge_weights()
+            self._set_edge_weights(self.edge_weight_key)
 
-    def _set_edge_weights(self):
+        if not nx.get_node_attributes(self.G, self.node_weight_key):
+            sys.stderr.write(
+                "No node weights detected, setting edge weights to one with node_weight_key = weight\n"
+            )
+            self._set_node_weights(self.node_weight_key)
+
+    def _set_edge_weights(self, key):
         for i, j in self.G.edges():
-            self.G[i][j][self.weight_key] = 1.0
+            self.G[i][j][key] = 1.0
+
+    def _set_node_weights(self, key):
+        nx.set_node_attributes(self.G, {node: 1.0 for node in self.G.nodes()}, key)
 
     def _get_neighbors(self, node):
         return list(self.G.neighbors(node))
 
     def _calculate_weight_sum(self, node, neighbors):
         """
-        Calculate sum of weights of edges connected to a given node
+        Calculate sum of weights of edges connected to a given node.
 
         """
-        return sum([self.G[node][neighbor][self.weight_key] for neighbor in neighbors])
+        return sum(
+            [self.G[node][neighbor][self.edge_weight_key] for neighbor in neighbors]
+        )
 
     def _get_shortest_path_matrix(self, source_neighborhood, target_neighborhood):
         """
@@ -80,7 +92,7 @@ class GraphMetric(ABC):
             [
                 [
                     nx.shortest_path_length(
-                        self.G, source, target, weight=self.weight_key
+                        self.G, source, target, weight=self.edge_weight_key
                     )
                     for target in target_neighborhood
                 ]
