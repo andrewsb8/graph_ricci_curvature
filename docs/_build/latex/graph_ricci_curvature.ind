@@ -1,0 +1,43 @@
+\begin{sphinxtheindex}
+\let\bigletter\sphinxstyleindexlettergroup
+\let\spxpagem \sphinxstyleindexpagemain
+\let\spxentry \sphinxstyleindexentry
+\let\spxextra \sphinxstyleindexextra
+
+  \bigletter C
+  \item \spxentry{calculate\_edge\_curvature()}\spxextra{graph\_ricci\_curvature.forman\_ricci\_curvature.FormanRicciCurvature method}, 
+		\hyperpage{9}
+  \item \spxentry{calculate\_edge\_curvature()}\spxextra{graph\_ricci\_curvature.ollivier\_ricci\_curvature.OllivierRicciCurvature method}, 
+		\hyperpage{10}
+  \item \spxentry{calculate\_ricci\_curvature()}\spxextra{graph\_ricci\_curvature.forman\_ricci\_curvature.FormanRicciCurvature method}, 
+		\hyperpage{10}
+  \item \spxentry{calculate\_ricci\_curvature()}\spxextra{graph\_ricci\_curvature.ollivier\_ricci\_curvature.OllivierRicciCurvature method}, 
+		\hyperpage{11}
+
+  \indexspace
+  \bigletter F
+  \item \spxentry{FormanRicciCurvature}\spxextra{class in graph\_ricci\_curvature.forman\_ricci\_curvature}, 
+		\hyperpage{9}
+
+  \indexspace
+  \bigletter G
+  \item \spxentry{graph\_ricci\_curvature}
+    \subitem \spxentry{module}, \hyperpage{12}
+  \item \spxentry{graph\_ricci\_curvature.forman\_ricci\_curvature}
+    \subitem \spxentry{module}, \hyperpage{9}
+  \item \spxentry{graph\_ricci\_curvature.ollivier\_ricci\_curvature}
+    \subitem \spxentry{module}, \hyperpage{10}
+
+  \indexspace
+  \bigletter M
+  \item \spxentry{module}
+    \subitem \spxentry{graph\_ricci\_curvature}, \hyperpage{12}
+    \subitem \spxentry{graph\_ricci\_curvature.forman\_ricci\_curvature}, \hyperpage{9}
+    \subitem \spxentry{graph\_ricci\_curvature.ollivier\_ricci\_curvature}, \hyperpage{10}
+
+  \indexspace
+  \bigletter O
+  \item \spxentry{OllivierRicciCurvature}\spxextra{class in graph\_ricci\_curvature.ollivier\_ricci\_curvature}, 
+		\hyperpage{10}
+
+\end{sphinxtheindex}
