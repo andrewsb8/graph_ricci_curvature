@@ -18,7 +18,7 @@ After download, install the wheel via pip: ```python -m pip install [file name].
 
 ### From PyPi
 
-Not done yet
+Not available yet
 
 ## Usage
 
