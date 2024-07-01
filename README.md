@@ -65,7 +65,7 @@ Output:
 
 ## Manual
 
-You can see the manual [here](https://github.com/andrewsb8/graph_ricci_curvature/blob/docs/docs/_build/latex/graph_ricci_curvature.pdf) which is in ```docs/_build/latex```. Or, after installation, can run the following with python
+You can see the manual [here](https://github.com/andrewsb8/graph_ricci_curvature/blob/main/docs/_build/latex/graph_ricci_curvature.pdf) which is in ```docs/_build/latex```. Or, after installation, can run the following with python
 
 ```
 import graph_ricci_curvature as grc
