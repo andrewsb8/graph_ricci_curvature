@@ -84,7 +84,7 @@ class FormanRicciCurvature(_RicciCurvature):
         source_node_w = self.G.nodes[source_node][self.node_weight_key]
         target_node_w = self.G.nodes[target_node][self.node_weight_key]
 
-        # equation for curvature (see Ref [2])
+        # equation for curvature (see Ref [1])
         curvature = edge_weight * (
             (source_node_w / edge_weight)
             + (target_node_w / edge_weight)

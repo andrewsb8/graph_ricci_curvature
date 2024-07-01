@@ -157,8 +157,6 @@ class OllivierRicciCurvature(_RicciCurvature):
             source_neighbors, target_neighbors, weight_path_matrix
         )
 
-        print(source_neighbors, source_dist, target_neighbors, target_dist, short_path_matrix)
-
         if method == "otd":
             opt_transport = ot.emd2(
                 source_dist, target_dist, short_path_matrix, numThreads=numThreads
@@ -251,7 +249,7 @@ class OllivierRicciCurvature(_RicciCurvature):
 
     def _calculate_gauss_weight_sum(self, node, neighbors):
         """
-        Need to normalize differently if using a gaussian mass distribution
+        Need to normalize with exponential if using a gaussian mass distribution
 
         """
         return sum(
