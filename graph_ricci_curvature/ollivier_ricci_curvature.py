@@ -1,7 +1,7 @@
 """
 References:
-    - Ollivier, Y. 2009. "Ricci curvature of Markov chains on metric spaces". Journal of Functional Analysis, 256(3), 810-864.
-    - Sandhu et al. 2015. "Graph Curvature for Differentiating Cancer Networks". Scientific Reports. DOi: 10.1038/srep12323
+    - [1] Ollivier, Y. 2009. "Ricci curvature of Markov chains on metric spaces". Journal of Functional Analysis, 256(3), 810-864. DOI: https://doi.org/10.1016/j.jfa.2008.11.001, arXiv: https://arxiv.org/abs/math/0701886
+    - [2] Sandhu et al. 2015. "Graph Curvature for Differentiating Cancer Networks". Scientific Reports. DOi: 10.1038/srep12323. DOI: https://doi.org/10.1038/srep12323.
 """
 
 import networkx as nx
@@ -9,10 +9,10 @@ import numpy as np
 import ot
 import math
 import warnings
-from graph_ricci_curvature._ricci_curvature import RicciCurvature
+from graph_ricci_curvature._ricci_curvature import _RicciCurvature
 
 
-class OllivierRicciCurvature(RicciCurvature):
+class OllivierRicciCurvature(_RicciCurvature):
     """
     Class for calculating Ollivier Ricci Curvature of a connected graph. Only
     edge weights are considered in Ollivier curvature and are set to 1.0 if values
@@ -22,8 +22,10 @@ class OllivierRicciCurvature(RicciCurvature):
     ----------
     G : networkx graph
         Input graph
-    weight_key : str
-        Key to specify edge weights in networkx dictionary. Default = weight
+    edge_weight_key : str
+        Key to specify edge weights in networkx graph. Default = weight.
+    node_weight_key : str
+        Key to specify node weights in networkx graph. Default = weight.
 
     """
 
@@ -36,6 +38,7 @@ class OllivierRicciCurvature(RicciCurvature):
         norm=True,
         dist_type="uniform",
         method="otd",
+        weight_path_matrix=False,
         numThreads=1,
         reg=0.1,
     ):
@@ -54,6 +57,8 @@ class OllivierRicciCurvature(RicciCurvature):
             Distribution type for mass distribution in source or target node neighborhood. Default: uniform. Options: uniform, linear, inverse-linear, gaussian.
         method : str
             Method for calculating optimal transport plan. Options: otd (optimal transport distance), sinkhorn.
+        weight_path_matrix : bool
+            When True, use edge weights when calculating shortest distance matrix. Default: False.
         numThreads : int
             Specify number of threads for optimal transport plan. Only for "otd" method.
         reg : float
@@ -81,6 +86,7 @@ class OllivierRicciCurvature(RicciCurvature):
                 alpha=alpha,
                 dist_type=dist_type,
                 method=method,
+                weight_path_matrix=weight_path_matrix,
                 numThreads=numThreads,
                 reg=reg,
             )
@@ -104,11 +110,12 @@ class OllivierRicciCurvature(RicciCurvature):
         alpha=0.5,
         dist_type="uniform",
         method="otd",
+        weight_path_matrix=False,
         numThreads=1,
         reg=0.1,
     ):
         """
-        Calculate value of Ricci Curvature tensor associated with an edge
+        Calculate value of Ollivier Ricci Curvature tensor associated with an edge
         between a source and target node defined as
 
         1 - ( Wasserstein 1 Distance / Edge Weight )
@@ -126,6 +133,8 @@ class OllivierRicciCurvature(RicciCurvature):
             Distribution type for mass distribution in source or target node neighborhood. Default: uniform. Options: uniform, linear, inverse-linear, gaussian.
         method : str
             Method for calculating optimal transport plan. Options: otd (optimal transport distance), sinkhorn
+        weight_path_matrix : bool
+            When True, use edge weights when calculating shortest distance matrix. Default: False.
         numThreads : int
             Specify number of threads for optimal transport plan. Only for "otd" method.
         reg : float
@@ -143,9 +152,11 @@ class OllivierRicciCurvature(RicciCurvature):
         target_neighbors, target_dist = self._neighborhood_mass_distribution(
             target_node, alpha, dist_type
         )
+
         short_path_matrix = self._get_shortest_path_matrix(
-            source_neighbors, target_neighbors
+            source_neighbors, target_neighbors, weight_path_matrix
         )
+
         if method == "otd":
             opt_transport = ot.emd2(
                 source_dist, target_dist, short_path_matrix, numThreads=numThreads
@@ -154,6 +165,7 @@ class OllivierRicciCurvature(RicciCurvature):
             opt_transport = ot.sinkhorn2(
                 source_dist, target_dist, short_path_matrix, reg=reg
             )
+
         edge_weight = self.G.edges[source_node, target_node][self.edge_weight_key]
         curvature = 1 - (opt_transport / edge_weight)
         return curvature
@@ -237,7 +249,7 @@ class OllivierRicciCurvature(RicciCurvature):
 
     def _calculate_gauss_weight_sum(self, node, neighbors):
         """
-        Need to normalize differently if using a gaussian mass distribution
+        Need to normalize with exponential if using a gaussian mass distribution
 
         """
         return sum(

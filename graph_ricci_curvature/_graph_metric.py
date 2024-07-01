@@ -4,7 +4,7 @@ import numpy as np
 import sys
 
 
-class GraphMetric(ABC):
+class _GraphMetric(ABC):
     """
     Parent class for classes calculating properties of a graph
 
@@ -68,7 +68,7 @@ class GraphMetric(ABC):
             [self.G[node][neighbor][self.edge_weight_key] for neighbor in neighbors]
         )
 
-    def _get_shortest_path_matrix(self, source_neighborhood, target_neighborhood):
+    def _get_shortest_path_matrix(self, source_neighborhood, target_neighborhood, weight_path_matrix):
         """
         Find shortest distance between every node in source neighborhood
         (attached to source node by one edge) and every node in target
@@ -80,6 +80,8 @@ class GraphMetric(ABC):
             list of node index values (ints or tuples) of a source node and its neighbors
         target_neighborhood : list
             list of node index values (ints or tuples) of a source node and its neighbors
+        weight_path_matrix : bool
+            When True, use edge weights when calculating shortest distance matrix. Default: False.
 
         Returns
         -------
@@ -88,11 +90,15 @@ class GraphMetric(ABC):
         neighborhood
 
         """
+        if weight_path_matrix:
+            key = self.edge_weight_key
+        else:
+            key = None
         return np.array(
             [
                 [
                     nx.shortest_path_length(
-                        self.G, source, target, weight=self.edge_weight_key
+                        self.G, source, target, weight=key
                     )
                     for target in target_neighborhood
                 ]
