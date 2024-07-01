@@ -2,9 +2,9 @@
 
 Calculate the Ricci curvature tensor for a networkx graph. Both Ollivier [1] and Forman [3] discretizations of Ricci curvature are implemented (see [4] for comparison of methods).
 
-# Installation
+## Installation
 
-## From Source
+### From Source
 - Clone the repository and ```cd``` into the top level directory
 - Install python's ```build```: ```python -m pip install build```
 - Build the project: ```python -m build```
@@ -12,15 +12,15 @@ Calculate the Ricci curvature tensor for a networkx graph. Both Ollivier [1] and
 
 For testing the installation, you need ```pytest```. Run ```pytest``` in the top level directory to run the full test suite.
 
-## Download the .whl from Releases
+### Download the .whl from Releases
 
 After download, install the wheel via pip: ```python -m pip install [file name].whl```
 
-## From PyPi
+### From PyPi
 
 Not done yet
 
-# Usage
+## Usage
 
 After installation:
 
@@ -63,7 +63,7 @@ Output:
 1.5 0.5
 ```
 
-# Manual
+## Manual
 
 You can see the manual [here](https://github.com/andrewsb8/graph_ricci_curvature/blob/docs/docs/_build/latex/graph_ricci_curvature.pdf) which is in ```docs/_build/latex```. Or, after installation, can run the following with python
 

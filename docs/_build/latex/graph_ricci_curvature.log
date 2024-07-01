@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=pdflatex 2024.3.17)  27 JUN 2024 10:59
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=pdflatex 2024.3.17)  1 JUL 2024 11:51
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -849,12 +849,6 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 
 ]
 Chapter 1.
-[1
-
-] [2
-
-]
-Chapter 2.
 LaTeX Font Info:    Trying to load font information for TS1+qtm on input line 1
 00.
 (/usr/share/texmf/tex/latex/tex-gyre/ts1qtm.fd
@@ -865,69 +859,66 @@ LaTeX Font Info:    Trying to load font information for T1+txtt on input line 1
 
 (/usr/share/texlive/texmf-dist/tex/latex/txfonts/t1txtt.fd
 File: t1txtt.fd 2000/12/15 v3.1
-) [3] [4
+)
+LaTeX Font Info:    Font shape `T1/txtt/b/n' in size <10> not available
+(Font)              Font shape `T1/txtt/bx/n' tried instead on input line 140.
+LaTeX Font Info:    Font shape `T1/txtt/m/it' in size <10> not available
+(Font)              Font shape `T1/txtt/m/sl' tried instead on input line 143.
+ [1
+
+] [2]
+Chapter 2.
+[3
+
+] [4
 
 ]
 Chapter 3.
-LaTeX Font Info:    Font shape `T1/txtt/b/n' in size <10> not available
-(Font)              Font shape `T1/txtt/bx/n' tried instead on input line 137.
-LaTeX Font Info:    Trying to load font information for TS1+txtt on input line 
-158.
-(/usr/share/texlive/texmf-dist/tex/latex/txfonts/ts1txtt.fd
-File: ts1txtt.fd 2000/12/15 v3.1
-) [5] [6
 
-]
+Overfull \hbox (16.81381pt too wide) in paragraph at lines 243--243
+\T1/qtm/m/it/10 edge_weight_key=\TS1/qtm/m/it/10 '\T1/qtm/m/it/10 weight\TS1/qt
+m/m/it/10 '\T1/qtm/m/n/10 , 
+ []
+
+
+Overfull \hbox (20.5738pt too wide) in paragraph at lines 243--243
+\T1/qtm/m/it/10 node_weight_key=\TS1/qtm/m/it/10 '\T1/qtm/m/it/10 weight\TS1/qt
+m/m/it/10 '\T1/txtt/m/n/10 )|  
+ []
+
+[5]
+Overfull \hbox (37.81375pt too wide) in paragraph at lines 350--350
+\T1/qtm/m/it/10 edge_weight_key=\TS1/qtm/m/it/10 '\T1/qtm/m/it/10 weight\TS1/qt
+m/m/it/10 '\T1/qtm/m/n/10 , 
+ []
+
+
+Overfull \hbox (41.57375pt too wide) in paragraph at lines 350--350
+\T1/qtm/m/it/10 node_weight_key=\TS1/qtm/m/it/10 '\T1/qtm/m/it/10 weight\TS1/qt
+m/m/it/10 '\T1/txtt/m/n/10 )|  
+ []
+
+[6] [7] [8]
 Chapter 4.
-[7] [8
+[9
+
+] [10
 
 ]
-Chapter 5.
-
-Overfull \hbox (16.81381pt too wide) in paragraph at lines 203--203
-\T1/qtm/m/it/10 edge_weight_key=\TS1/qtm/m/it/10 '\T1/qtm/m/it/10 weight\TS1/qt
-m/m/it/10 '\T1/qtm/m/n/10 , 
- []
-
-
-Overfull \hbox (20.5738pt too wide) in paragraph at lines 203--203
-\T1/qtm/m/it/10 node_weight_key=\TS1/qtm/m/it/10 '\T1/qtm/m/it/10 weight\TS1/qt
-m/m/it/10 '\T1/txtt/m/n/10 )|  
- []
-
-[9]
-Overfull \hbox (37.81375pt too wide) in paragraph at lines 310--310
-\T1/qtm/m/it/10 edge_weight_key=\TS1/qtm/m/it/10 '\T1/qtm/m/it/10 weight\TS1/qt
-m/m/it/10 '\T1/qtm/m/n/10 , 
- []
-
-
-Overfull \hbox (41.57375pt too wide) in paragraph at lines 310--310
-\T1/qtm/m/it/10 node_weight_key=\TS1/qtm/m/it/10 '\T1/qtm/m/it/10 weight\TS1/qt
-m/m/it/10 '\T1/txtt/m/n/10 )|  
- []
-
-[10] [11] [12]
-Chapter 6.
-[13
-
-] [14
-
-]
-Overfull \hbox (3.62183pt too wide) in paragraph at lines 485--486
+Overfull \hbox (3.62183pt too wide) in paragraph at lines 525--526
 []\T1/txtt/m/n/10 graph_ricci_curvature.forman_ricci_curvature\T1/qtm/m/n/10 ,
  []
 
 
-Overfull \hbox (14.1218pt too wide) in paragraph at lines 486--487
+Overfull \hbox (14.1218pt too wide) in paragraph at lines 526--527
 []\T1/txtt/m/n/10 graph_ricci_curvature.ollivier_ricci_curvature\T1/qtm/m/n/10 
 ,
  []
 
-[15
+[11
 
 
-] (./graph_ricci_curvature.ind [16
+] (./graph_ricci_curvature.ind [12
 
 
 ]
@@ -1019,19 +1010,19 @@ Overfull \hbox (4.70248pt too wide) in paragraph at lines 40--42
 
  []
 
-[17
+[13
 
 
 ]) (./graph_ricci_curvature.aux)
 Package rerunfilecheck Info: File `graph_ricci_curvature.out' has not changed.
-(rerunfilecheck)             Checksum: D59F118A33498506FCFB2E48B4D42E95;3488.
+(rerunfilecheck)             Checksum: 937BF2B823960B72657AA0893A20B924;3616.
  ) 
 Here is how much of TeX's memory you used:
- 16083 strings out of 478287
- 269537 string characters out of 5849289
- 583152 words of memory out of 5000000
- 33838 multiletter control sequences out of 15000+600000
- 520862 words of font info for 70 fonts, out of 8000000 for 9000
+ 16055 strings out of 478287
+ 269166 string characters out of 5849289
+ 588200 words of memory out of 5000000
+ 33815 multiletter control sequences out of 15000+600000
+ 523797 words of font info for 71 fonts, out of 8000000 for 9000
  1142 hyphenation exceptions out of 8191
  70i,11n,76p,886b,650s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/share/texmf/fonts/enc/dvips/tex-gyre/q-ec.enc}{/usr/share/texmf/fonts/e
@@ -1042,11 +1033,11 @@ re/qtmb.pfb></usr/share/texmf/fonts/type1/public/tex-gyre/qtmr.pfb></usr/share/
 texmf/fonts/type1/public/tex-gyre/qtmri.pfb></usr/share/texlive/texmf-dist/font
 s/type1/public/txfonts/t1xbtt.pfb></usr/share/texlive/texmf-dist/fonts/type1/pu
 blic/txfonts/t1xtt.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/txfont
-s/tcxtt.pfb>
-Output written on graph_ricci_curvature.pdf (21 pages, 177781 bytes).
+s/t1xtt.pfb>
+Output written on graph_ricci_curvature.pdf (17 pages, 179823 bytes).
 PDF statistics:
- 299 PDF objects out of 1000 (max. 8388607)
- 256 compressed objects within 3 object streams
- 53 named destinations out of 1000 (max. 500000)
- 221 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 284 PDF objects out of 1000 (max. 8388607)
+ 246 compressed objects within 3 object streams
+ 50 named destinations out of 1000 (max. 500000)
+ 229 words of extra memory for PDF output out of 10000 (max. 10000000)
 

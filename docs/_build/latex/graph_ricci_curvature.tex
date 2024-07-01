@@ -64,8 +64,8 @@
 
 
 \title{graph\_ricci\_curvature}
-\date{Jun 27, 2024}
-\release{0.1.0}
+\date{Jul 01, 2024}
+\release{1.0.0}
 \author{Brian Andrews}
 \newcommand{\sphinxlogo}{\vbox{}}
 \renewcommand{\releasename}{Release}
@@ -89,17 +89,17 @@
 \chapter{graph\_ricci\_curvature}
 \label{\detokenize{index:graph-ricci-curvature}}
 \sphinxAtStartPar
-Calculate Ricci Curvature for a networkx graph
+Calculate the Ricci curvature tensor for a networkx graph. Both Ollivier {[}1{]} and Forman {[}3{]} discretizations of Ricci curvature are implemented (see {[}4{]} for comparison of methods).
 
 
-\chapter{Installation}
+\section{Installation}
 \label{\detokenize{index:installation}}
 
-\section{From Source}
+\subsection{From Source}
 \label{\detokenize{index:from-source}}\begin{itemize}
 \item {} 
 \sphinxAtStartPar
-Clone the repository and \sphinxcode{\sphinxupquote{cd}} into it
+Clone the repository and \sphinxcode{\sphinxupquote{cd}} into the top level directory
 
 \item {} 
 \sphinxAtStartPar
@@ -111,24 +111,27 @@ Build the project: \sphinxcode{\sphinxupquote{python \sphinxhyphen{}m build}}
 
 \item {} 
 \sphinxAtStartPar
-Install the package: \sphinxcode{\sphinxupquote{python \sphinxhyphen{}m pip install dist/{[}file name{]}.whl}}
+Install the project with pip: \sphinxcode{\sphinxupquote{python \sphinxhyphen{}m pip install dist/{[}file name{]}.whl}}
 
 \end{itemize}
 
+\sphinxAtStartPar
+For testing the installation, you need \sphinxcode{\sphinxupquote{pytest}}. Run \sphinxcode{\sphinxupquote{pytest}} in the top level directory to run the full test suite.
 
-\section{Download the .whl from Releases}
+
+\subsection{Download the .whl from Releases}
 \label{\detokenize{index:download-the-whl-from-releases}}
 \sphinxAtStartPar
-Not done yet
+After download, install the wheel via pip: \sphinxcode{\sphinxupquote{python \sphinxhyphen{}m pip install {[}file name{]}.whl}}
 
 
-\section{From PyPi}
+\subsection{From PyPi}
 \label{\detokenize{index:from-pypi}}
 \sphinxAtStartPar
 Not done yet
 
 
-\chapter{Usage}
+\section{Usage}
 \label{\detokenize{index:usage}}
 \sphinxAtStartPar
 After installation:
@@ -136,11 +139,17 @@ After installation:
 \begin{sphinxVerbatim}[commandchars=\\\{\}]
 \PYG{k+kn}{from} \PYG{n+nn}{graph\PYGZus{}ricci\PYGZus{}curvature}\PYG{n+nn}{.}\PYG{n+nn}{ollivier\PYGZus{}ricci\PYGZus{}curvature} \PYG{k+kn}{import} \PYG{n}{OllivierRicciCurvature}
 \PYG{k+kn}{import} \PYG{n+nn}{networkx} \PYG{k}{as} \PYG{n+nn}{nx}
+
+\PYG{c+c1}{\PYGZsh{}setting up a simple graph}
 \PYG{n}{G} \PYG{o}{=} \PYG{n}{nx}\PYG{o}{.}\PYG{n}{Graph}\PYG{p}{(}\PYG{p}{)}
 \PYG{n}{G}\PYG{o}{.}\PYG{n}{add\PYGZus{}nodes\PYGZus{}from}\PYG{p}{(}\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{,} \PYG{l+m+mi}{2}\PYG{p}{,} \PYG{l+m+mi}{3}\PYG{p}{]}\PYG{p}{)}
 \PYG{n}{G}\PYG{o}{.}\PYG{n}{add\PYGZus{}edges\PYGZus{}from}\PYG{p}{(}\PYG{p}{[}\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{p}{,} \PYG{l+m+mi}{2}\PYG{p}{)}\PYG{p}{,} \PYG{p}{(}\PYG{l+m+mi}{1}\PYG{p}{,} \PYG{l+m+mi}{3}\PYG{p}{)}\PYG{p}{]}\PYG{p}{)}
+
+\PYG{c+c1}{\PYGZsh{}create an object and calculate the values of the tensor and its contractions}
 \PYG{n}{g} \PYG{o}{=} \PYG{n}{OllivierRicciCurvature}\PYG{p}{(}\PYG{n}{G}\PYG{p}{)}
 \PYG{n}{g}\PYG{o}{.}\PYG{n}{calculate\PYGZus{}ricci\PYGZus{}curvature}\PYG{p}{(}\PYG{p}{)}
+
+\PYG{c+c1}{\PYGZsh{}print results of calculation}
 \PYG{n+nb}{print}\PYG{p}{(}\PYG{n+nb}{list}\PYG{p}{(}\PYG{n}{g}\PYG{o}{.}\PYG{n}{G}\PYG{o}{.}\PYG{n}{edges}\PYG{o}{.}\PYG{n}{data}\PYG{p}{(}\PYG{p}{)}\PYG{p}{)}\PYG{p}{)}
 \PYG{n+nb}{print}\PYG{p}{(}\PYG{n+nb}{list}\PYG{p}{(}\PYG{n}{g}\PYG{o}{.}\PYG{n}{G}\PYG{o}{.}\PYG{n}{nodes}\PYG{o}{.}\PYG{n}{data}\PYG{p}{(}\PYG{p}{)}\PYG{p}{)}\PYG{p}{)}
 \PYG{n+nb}{print}\PYG{p}{(}\PYG{n}{g}\PYG{o}{.}\PYG{n}{G}\PYG{o}{.}\PYG{n}{graph}\PYG{p}{[}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{graph\PYGZus{}ricci\PYGZus{}curvature}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{]}\PYG{p}{,} \PYG{n}{g}\PYG{o}{.}\PYG{n}{G}\PYG{o}{.}\PYG{n}{graph}\PYG{p}{[}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{norm\PYGZus{}graph\PYGZus{}ricci\PYGZus{}curvature}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{]}\PYG{p}{)}
@@ -150,24 +159,55 @@ After installation:
 Output:
 
 \begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{c+c1}{\PYGZsh{}edge curvature data}
 \PYG{p}{[}
 \PYG{p}{(}\PYG{l+m+mi}{1}\PYG{p}{,} \PYG{l+m+mi}{2}\PYG{p}{,} \PYG{p}{\PYGZob{}}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{weight}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{:} \PYG{l+m+mf}{1.0}\PYG{p}{,} \PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{ricci\PYGZus{}curvature}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{:} \PYG{l+m+mf}{0.5}\PYG{p}{\PYGZcb{}}\PYG{p}{)}\PYG{p}{,}
 \PYG{p}{(}\PYG{l+m+mi}{1}\PYG{p}{,} \PYG{l+m+mi}{3}\PYG{p}{,} \PYG{p}{\PYGZob{}}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{weight}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{:} \PYG{l+m+mf}{1.0}\PYG{p}{,} \PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{ricci\PYGZus{}curvature}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{:} \PYG{l+m+mf}{0.5}\PYG{p}{\PYGZcb{}}\PYG{p}{)}\PYG{p}{,}
 \PYG{p}{]}
+
+\PYG{c+c1}{\PYGZsh{}node curvature data}
 \PYG{p}{[}
-\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{p}{,} \PYG{p}{\PYGZob{}}\PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{ricci\PYGZus{}curvature}\PYG{l+s+s1}{\PYGZsq{}}\PYG{p}{:} \PYG{l+m+mf}{0.5}\PYG{p}{\PYGZcb{}}\PYG{p}{)}\PYG{p}{,}
-\PYG{p}{(}\PYG{l+m+mi}{2}\PYG{p}{,} \PYG{p}{\PYGZob{}}\PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{ricci\PYGZus{}curvature}\PYG{l+s+s1}{\PYGZsq{}}\PYG{p}{:} \PYG{l+m+mf}{0.5}\PYG{p}{\PYGZcb{}}\PYG{p}{)}\PYG{p}{,}
-\PYG{p}{(}\PYG{l+m+mi}{3}\PYG{p}{,} \PYG{p}{\PYGZob{}}\PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{ricci\PYGZus{}curvature}\PYG{l+s+s1}{\PYGZsq{}}\PYG{p}{:} \PYG{l+m+mf}{0.5}\PYG{p}{\PYGZcb{}}\PYG{p}{)}
+\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{p}{,} \PYG{p}{\PYGZob{}}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{weight}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{:} \PYG{l+m+mf}{1.0}\PYG{p}{,} \PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{ricci\PYGZus{}curvature}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{:} \PYG{l+m+mf}{0.5}\PYG{p}{\PYGZcb{}}\PYG{p}{)}\PYG{p}{,}
+\PYG{p}{(}\PYG{l+m+mi}{2}\PYG{p}{,} \PYG{p}{\PYGZob{}}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{weight}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{:} \PYG{l+m+mf}{1.0}\PYG{p}{,} \PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{ricci\PYGZus{}curvature}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{:} \PYG{l+m+mf}{0.5}\PYG{p}{\PYGZcb{}}\PYG{p}{)}\PYG{p}{,}
+\PYG{p}{(}\PYG{l+m+mi}{3}\PYG{p}{,} \PYG{p}{\PYGZob{}}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{weight}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{:} \PYG{l+m+mf}{1.0}\PYG{p}{,} \PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{ricci\PYGZus{}curvature}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{:} \PYG{l+m+mf}{0.5}\PYG{p}{\PYGZcb{}}\PYG{p}{)}
 \PYG{p}{]}
+
+\PYG{c+c1}{\PYGZsh{}graph curvature data}
 \PYG{l+m+mf}{1.5} \PYG{l+m+mf}{0.5}
 \end{sphinxVerbatim}
+
+
+\section{Manual}
+\label{\detokenize{index:manual}}
+\sphinxAtStartPar
+You can see the manual \sphinxhref{https://github.com/andrewsb8/graph\_ricci\_curvature/blob/docs/docs/\_build/latex/graph\_ricci\_curvature.pdf}{here} which is in \sphinxcode{\sphinxupquote{docs/\_build/latex}}. Or, after installation, can run the following with python
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{k+kn}{import} \PYG{n+nn}{graph\PYGZus{}ricci\PYGZus{}curvature} \PYG{k}{as} \PYG{n+nn}{grc}
+\PYG{n}{grc}\PYG{o}{.}\PYG{n}{\PYGZus{}\PYGZus{}manual\PYGZus{}\PYGZus{}}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+to obtain the link to the pdf in the github repository.
 
 
 \chapter{References}
 \label{\detokenize{index:references}}\begin{itemize}
 \item {} 
 \sphinxAtStartPar
-{[}1{]} https://www.nature.com/articles/s41598\sphinxhyphen{}018\sphinxhyphen{}27001\sphinxhyphen{}3
+{[}1{]} Ollivier, Y. 2009. “Ricci curvature of Markov chains on metric spaces”. Journal of Functional Analysis, 256(3), 810\sphinxhyphen{}864. DOI: https://doi.org/10.1016/j.jfa.2008.11.001, arXiv: https://arxiv.org/abs/math/0701886
+
+\item {} 
+\sphinxAtStartPar
+{[}2{]} Sandhu et al. 2015. “Graph Curvature for Differentiating Cancer Networks”. Scientific Reports. DOi: 10.1038/srep12323. DOI: https://doi.org/10.1038/srep12323.
+
+\item {} 
+\sphinxAtStartPar
+{[}3{]} R P Sreejith et al. “Forman curvature for complex networks” J. Stat. Mech. (2016) 063206. DOI: 10.1088/1742\sphinxhyphen{}5468/2016/06/063206. arXiv: https://arxiv.org/pdf/1603.00386.
+
+\item {} 
+\sphinxAtStartPar
+{[}4{]} Samal et al. “Comparative analysis of two discretizations of Ricci curvature for complex networks”. Nature Scientific Reports, 2018. https://www.nature.com/articles/s41598\sphinxhyphen{}018\sphinxhyphen{}27001\sphinxhyphen{}3.
 
 \end{itemize}
 
