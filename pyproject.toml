@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "graph-ricci-curvature"
-version = "0.1.0"
+version = "1.0.0"
 authors = [
   { name="Brian Andrews", email="b9andrews@gmail.com" },
 ]
