@@ -45,7 +45,7 @@ class _GraphMetric(ABC):
 
         if not nx.get_node_attributes(self.G, self.node_weight_key):
             sys.stderr.write(
-                "No node weights detected, setting edge weights to one with node_weight_key = weight\n"
+                "No node weights detected, setting node weights to one with node_weight_key = weight\n"
             )
             self._set_node_weights(self.node_weight_key)
 
